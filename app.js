@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 const db = require("./databaseConnection");
 
-const clienteRoute = require('./routes/atendimentoRoute');
+const atendimentoRoute = require('./routes/atendimentoRoute');
 
 
 const app = express();
@@ -26,7 +26,7 @@ app.use(cookieParser());
 /* Define Routes */
 const baseUri = "/api";
 
-app.use(baseUri, clienteRoute);
+app.use(baseUri, atendimentoRoute);
 
 
 // catch 404 and forward to error handler
