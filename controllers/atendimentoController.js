@@ -4,7 +4,12 @@ const { prop } = require('ramda');
 const getAll = ( req, res, next ) => {
     
     Atendimentos.find({})
-    .then( atendimentos => res.json( atendimentos ) )
+    .then( atendimentos => {
+        //const _io = io;
+        io.enviarUpdateTecnico(321321321);
+        console.log(io);
+        res.json( atendimentos ) 
+    })
     .catch( error => next(error) )
 
 }
@@ -20,6 +25,30 @@ const atendimentoNew = ( req, res, next ) => {
     
 }
 
+const updateAtendimento = ( req, res, next ) => {
+
+    const atendimento = prop("body", req);
+    const _id = prop("id", req.params);
+
+    Atendimentos.findByIdAndUpdate(_id, atendimento)
+    .then(updatedAtendimento => updatedAtendimento._id)
+    .then(id => Atendimentos.findById(id))
+    .then( updatedData => res.json(updatedData) )
+    .catch( error => next(error) )
+}
+
+const getAtendimentoByID = ( req, res, next ) => {
+
+    const _id = prop("id", req.params);
+    Atendimentos.findById(_id)
+    .then(atendimento => res.json(atendimento) )
+    .catch( error => next(error) )
+    
+}
+
 module.exports = {
     getAll,
+    atendimentoNew,
+    updateAtendimento,
+    getAtendimentoByID
 }

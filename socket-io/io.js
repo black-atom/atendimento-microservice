@@ -8,6 +8,7 @@ module.exports = ( server ) => {
 
     if(isNil(io)){
         io = new socketIO(server);
+        global.io = this;
     }else if(both(isNil(server), isNil(io))){
         throw new Error("Socket io not initilized!!!");
     }
@@ -21,10 +22,11 @@ module.exports = ( server ) => {
     })
 
     return {
-        enviarUpdateTecnico : (nome) => {
-            const socket = connectedTecnicos.find(s => s.tecnico.name = nome);
+        enviarUpdateTecnico : (_id) => {
+            const socket = connectedTecnicos.find(s => s.tecnico._id = _id);
             if(socket){
-                socket.imit("updateAtendimentos");
+                //console.log(socket.emit());
+                socket.emit('hello', 'can you hear me?');
             }
         }
     }
