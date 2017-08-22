@@ -5,6 +5,10 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const jwt = require('express-jwt');
+const authConfig = require('./config/authConfig')();
+
+
 
 const db = require("./databaseConnection");
 
@@ -12,6 +16,11 @@ const atendimentoRoute = require('./routes/atendimentoRoute');
 
 
 const app = express();
+if( !authConfig.bypass ){
+	app.use("/api", jwt({secret: authConfig.secret }));
+}
+app.use(cors());
+
 
 // view engine setup
 app.set('view engine', 'jade');
@@ -20,7 +29,6 @@ app.set('view engine', 'jade');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
