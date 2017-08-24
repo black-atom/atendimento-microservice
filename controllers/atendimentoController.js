@@ -46,6 +46,16 @@ const getAtendimentoByID = ( req, res, next ) => {
     
 }
 
+const getAtendimentosFromAEmployee = ( req, res, next ) => {
+
+    const _id = prop("id", req.params);
+    Atendimentos.findById(_id)
+    .then(atendimento => res.json(atendimento) )
+    .catch( error => next(error) )
+    
+}
+
+
 module.exports = {
     getAll,
     atendimentoNew,
