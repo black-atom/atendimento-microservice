@@ -1,9 +1,10 @@
 const Atendimentos = require('../models/atendimentos');
 const { prop } = require('ramda');
+const multer = require('multer');
 
 const getAll = ( req, res, next ) => {
     
-    Atendimentos.find({})
+    Atendimentos.find(req.query)
     .then( atendimentos => {
         //const _io = io;
         io.enviarUpdateTecnico(321321321);
@@ -54,6 +55,18 @@ const getAtendimentosFromAEmployee = ( req, res, next ) => {
     .catch( error => next(error) )
     
 }
+
+const uploadingHandler = multer({
+  dest: "../public/images",
+  limits: {fileSize: 1000000, files:1},
+}).single("file");
+
+
+const atendimentoUpload = ( req, res, next ) => {
+    console.log(req.file.path);
+    console.log(req.body.chamado);
+    res.end('File is uploaded');
+};
 
 
 module.exports = {
