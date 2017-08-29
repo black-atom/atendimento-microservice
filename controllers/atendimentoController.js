@@ -47,31 +47,22 @@ const getAtendimentoByID = ( req, res, next ) => {
     
 }
 
-const getAtendimentosFromAEmployee = ( req, res, next ) => {
+const getTodosAtendimentosDosEmpregados = ( req, res, next ) => {
 
-    const _id = prop("id", req.params);
-    Atendimentos.findById(_id)
-    .then(atendimento => res.json(atendimento) )
-    .catch( error => next(error) )
+    // const _id = prop("id", req.params);
+   // Atendimentos.aggregate().
+    // .then(atendimento => res.json(atendimento) )
+    // .catch( error => next(error) )
+
+    res.send("oiiii");
     
 }
-
-const uploadingHandler = multer({
-  dest: "../public/images",
-  limits: {fileSize: 1000000, files:1},
-}).single("file");
-
-
-const atendimentoUpload = ( req, res, next ) => {
-    console.log(req.file.path);
-    console.log(req.body.chamado);
-    res.end('File is uploaded');
-};
 
 
 module.exports = {
     getAll,
     atendimentoNew,
     updateAtendimento,
-    getAtendimentoByID
+    getAtendimentoByID,
+    getTodosAtendimentosDosEmpregados
 }
