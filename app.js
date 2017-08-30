@@ -16,13 +16,27 @@ const atendimentoRoute = require('./routes/atendimentoRoute');
 
 
 const app = express();
-if( !authConfig.bypass ){
-	app.use("/api", jwt({secret: authConfig.secret }), (err, req, res, next) => {
-		if (err.name === 'UnauthorizedError') { 
-			return(res.status(401).send('Invalid authorization token'));
-		}
-	});
-}
+
+app.use("/api", 
+  jwt({
+    secret: authConfig.secret,
+    credentialsRequired: authConfig.bypass
+  }), 
+  (err, req, res, next) => {
+    if (err.name === 'UnauthorizedError') { 
+      return(res.status(401).send('Invalid authorization token'));
+    }
+  }
+);
+
+app.use("/api", (req, res, next) => {
+  if(req.body){
+    req.body.createdBy = req.user;
+    req.body.updatedBy = req.user;
+  }
+  next();
+})
+
 app.use(cors());
 
 

@@ -8,7 +8,6 @@ const getAll = ( req, res, next ) => {
     .then( atendimentos => {
         //const _io = io;
         io.enviarUpdateTecnico(321321321);
-        console.log(io);
         res.json( atendimentos ) 
     })
     .catch( error => next(error) )

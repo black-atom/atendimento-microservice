@@ -34,6 +34,7 @@ const atendimentoSchema = new Schema({
             type: String, 
             required: [true, "Entre com o nome  do Cliente"]
         },
+        nome_fantasia: { type: String, default: "" },
         inscricao_estadual: { type: String, default: "" }
     },
     endereco: {
