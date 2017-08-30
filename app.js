@@ -31,8 +31,8 @@ app.use("/api",
 
 app.use("/api", (req, res, next) => {
   if(req.body){
-    req.body.createdBy = req.user;
-    req.body.updatedBy = req.user;
+    req.body.createdBy = req.user || 'Ambiente de Test';
+    req.body.updatedBy = req.user || 'Ambiente de Test';
   }
   next();
 })
