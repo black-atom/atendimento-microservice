@@ -30,10 +30,11 @@ const atendimentoSchema = new Schema({
             type: String, 
             required: [true, "Entre com o cnpj/cpf do cliente"]
         },
-        nome: {
+        nome_razao_social: {
             type: String, 
             required: [true, "Entre com o nome  do Cliente"]
         },
+        inscricao_estadual: { type: String, default: "" }
     },
     endereco: {
         type: enderecoSchema,
@@ -65,6 +66,27 @@ const atendimentoSchema = new Schema({
             required: [true, "Entre com o nome do tecnico"]
         },
     },
+    tipo: {
+        type: String, 
+        default: ""
+    },
+    valor: {
+        type: Number, 
+        default: ""
+    },
+    avaliacao: {
+        type: [{
+            pergunta: {
+                type: String, 
+                required: true
+            },
+            valor: {
+                type: Number,
+                default: ""
+            },
+        }],
+        default: []
+    }
     // tecnicoAcompanhante: {
     //     _id: {
     //         type: Schema.Types.ObjectId
