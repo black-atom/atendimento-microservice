@@ -1,5 +1,6 @@
 const {Schema} = require("mongoose");
 const timestamps = require('mongoose-timestamp');
+const userAudit = require('mongoose-useraudit-plugin');
 const dbConnection = require('../databaseConnection');
 
 const enderecoSchema  = new Schema({
@@ -76,6 +77,7 @@ const atendimentoSchema = new Schema({
 }, { versionKey: false });
 
 atendimentoSchema.plugin(timestamps);
+atendimentoSchema.plugin(userAudit);
 
 
 module.exports = dbConnection.model("atendimentos", atendimentoSchema);
