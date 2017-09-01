@@ -91,8 +91,8 @@ const atendimentoSchema = new Schema({
             type: Schema.Types.ObjectId
         },
         nome: {
-            type: String, 
-            required: [true, "Entre com o nome do tecnico"]
+            type: String,
+            default:""
         },
     },
     tipo: {
