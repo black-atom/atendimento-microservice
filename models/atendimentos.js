@@ -4,7 +4,8 @@ const userAudit = require('mongoose-useraudit-plugin');
 const dbConnection = require('../databaseConnection');
 
 const enderecoSchema  = new Schema({
-    rua: {type: String, required: [true, "Entre com o nome da rua e numero"]},
+    rua: {type: String, required: [true, "Entre com o nome da rua"]},
+    numero: {type: String, required: [true, "Entre com o numero"]},
     complemento: { type: String, default: "" },
     bairro: {type: String, required: [true, "Entre com o bairro"]},
     cidade: {type: String, required: [true, "Entre com a cidade"]},
@@ -35,8 +36,14 @@ const atendimentoSchema = new Schema({
             type: String, 
             required: [true, "Entre com o nome  do Cliente"]
         },
-        nome_fantasia: { type: String, default: "" },
-        inscricao_estadual: { type: String, default: "" }
+        nome_fantasia: { 
+            type: String, 
+            default: ""
+         },
+        inscricao_estadual: { 
+            type: String, 
+            default: "" 
+        }
     },
     endereco: {
         type: enderecoSchema,
@@ -50,13 +57,33 @@ const atendimentoSchema = new Schema({
         type: contatoSchema,
         required: [true, "Entre com os dados de contato"]
     },
-    data: {
+    data_atendimento: {
         type: Schema.Types.Date,
         required: [true, "Entre com a data do atendimento"],
         default: new Date(),
     },
     descricao: {
         type: String, 
+        default: ""
+    },
+    testes_efetuados: {
+        type: String, 
+        required: [true, "Entre com os testes efetuados"],
+        default: ""
+    },
+    modelo_equipamento: {
+        type: String, 
+        required: [true, "Entre com o modelo do equipamento"],
+        default: ""
+    },
+    numero_equipamento: {
+        type: String, 
+        required: [true, "Entre com o número do equipamento"],
+        default: ""
+    },
+    estacionamento: {
+        type: String, 
+        required: [true, "Entre com o estacionamento"],
         default: ""
     },
     tecnico: {
@@ -89,7 +116,10 @@ const atendimentoSchema = new Schema({
         }],
         default: []
     },
-    observacao: { type: String, default: "" }
+    observacao: { 
+        type: String, 
+        default: "" 
+    }
     // tecnicoAcompanhante: {
     //     _id: {
     //         type: Schema.Types.ObjectId
