@@ -1,6 +1,7 @@
 const Atendimentos = require('../models/atendimentos');
 const { prop } = require('ramda');
 const multer = require('multer');
+const Promise = require('bluebird');
 
 const getAll = ( req, res, next ) => {
     
@@ -46,6 +47,27 @@ const getAtendimentoByID = ( req, res, next ) => {
     
 }
 
+const patchAtendimentos = ( req, res, next ) => {
+
+    const atendimentosData = prop("body", req);
+
+    if(Array.isArray(atendimentosData)){
+
+        const atendimentosPromise = atendimentosData.map(atendimentoData =>{
+             return Atendimentos.findByIdAndUpdate(atendimentoData._id, atendimentoData)
+        })
+        
+        Promise.all(atendimentosPromise)
+        .then(atendimento => res.json(atendimento) )
+        .catch( error => next(error) )
+
+    }else{
+        next(new Error("You have not passed an array"));
+    }
+    
+}
+
+
 const getTodosAtendimentosDosEmpregados = ( req, res, next ) => {
 
     // const _id = prop("id", req.params);
@@ -60,6 +82,7 @@ const getTodosAtendimentosDosEmpregados = ( req, res, next ) => {
 
 module.exports = {
     getAll,
+    patchAtendimentos,
     atendimentoNew,
     updateAtendimento,
     getAtendimentoByID,

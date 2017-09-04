@@ -4,6 +4,7 @@ const uploadController = require('../controllers/uploadController');
 const express = require('express');
 
 route.get('/atendimentos', atendimentoController.getAll);
+route.patch('/atendimentos', atendimentoController.patchAtendimentos);
 route.get('/atendimentos/:id', atendimentoController.getAtendimentoByID);
 route.post('/atendimentos', atendimentoController.atendimentoNew);
 route.put('/atendimentos/:id', atendimentoController.updateAtendimento);
