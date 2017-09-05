@@ -126,7 +126,7 @@ const atendimentoSchema = new Schema({
             default: ""
         },
         data: {
-            type: String, 
+            type: Date, 
             default: ""
         }
     },
@@ -136,7 +136,7 @@ const atendimentoSchema = new Schema({
             default: ""
         },
         data: {
-            type: String, 
+            type: Date, 
             default: ""
         }
     },
