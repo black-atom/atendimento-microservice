@@ -148,7 +148,17 @@ const atendimentoSchema = new Schema({
     encaixe: {
         type: Boolean, 
         default: false
-    }
+    },
+    inativo: {
+        statos: {
+            type: Boolean, 
+            default: false
+        },
+        motivo: {
+            type: String, 
+            default: ""
+        }
+    },
 
     // tecnicoAcompanhante: {
     //     _id: {
