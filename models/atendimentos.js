@@ -141,10 +141,8 @@ const atendimentoSchema = new Schema({
         }
     },
     estado: {
-        type: {
-            type: String, 
-            enum: ['associado', 'em_descolamento', 'chegou_ao_destino', 'inicio_atendimento', 'fim_do_atendimento'],
-        },
+        type: String, 
+        enum: ['associado', 'em_descolamento', 'chegou_ao_destino', 'inicio_atendimento', 'fim_do_atendimento'],
         default: 'associado'
     },
     encaixe: {
