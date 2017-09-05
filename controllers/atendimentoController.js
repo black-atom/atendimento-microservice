@@ -47,6 +47,7 @@ const getAtendimentoByID = ( req, res, next ) => {
     
 }
 
+
 const patchAtendimentos = ( req, res, next ) => {
 
     const atendimentosData = prop("body", req);

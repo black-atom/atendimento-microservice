@@ -119,7 +119,39 @@ const atendimentoSchema = new Schema({
     observacao: { 
         type: String, 
         default: "" 
+    },
+    inicio: {
+        km: {
+            type: Number, 
+            default: ""
+        },
+        data: {
+            type: String, 
+            default: ""
+        }
+    },
+    fim: {
+        km: {
+            type: Number, 
+            default: ""
+        },
+        data: {
+            type: String, 
+            default: ""
+        }
+    },
+    estado: {
+        type: [{
+            type: String, 
+            enum: ['associado', 'em_descolamento', 'chegou_ao_destino', 'inicio_atendimento', 'fim_do_atendimento'],
+        }],
+        default: 'associado'
+    },
+    encaixe: {
+        type: Boolean, 
+        default: false
     }
+
     // tecnicoAcompanhante: {
     //     _id: {
     //         type: Schema.Types.ObjectId
