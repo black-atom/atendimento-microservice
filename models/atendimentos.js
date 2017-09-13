@@ -88,7 +88,7 @@ const atendimentoSchema = new Schema({
     },
     tecnico: {
         _id: {
-            type: Schema.Types.ObjectId
+            type: Schema.Types.ObjectId,
         },
         nome: {
             type: String,

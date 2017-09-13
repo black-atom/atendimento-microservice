@@ -2,6 +2,8 @@ const Atendimentos = require('../models/atendimentos');
 const { prop } = require('ramda');
 const multer = require('multer');
 const Promise = require('bluebird');
+const axios = require('axios');
+
 
 const getAll = ( req, res, next ) => {
     
@@ -71,13 +73,62 @@ const patchAtendimentos = ( req, res, next ) => {
 
 const getTodosAtendimentosDosEmpregados = ( req, res, next ) => {
 
-    // const _id = prop("id", req.params);
-   // Atendimentos.aggregate().
-    // .then(atendimento => res.json(atendimento) )
-    // .catch( error => next(error) )
+    const data  = req.query.data || new Date() ;
 
-    res.send("oiiii");
+    const login = {
+        username: 'vlima',
+        password: 'redhat'
+    };
+
+    const headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    };
+
+    axios.request({
+      headers,
+      data: JSON.stringify(login),
+      url: 'http://165.227.78.113:3000/login',
+      method: 'POST'
+    })
+    .then( result => result.data.token)
+    .then( token  => {
+        return Object.assign({}, headers, { 'Authorization': 'Bearer ' + token })
+    })
+    .then( headers => ({
+      headers,
+      url: 'http://165.227.78.113:3000/api/funcionarios',
+      method: 'GET'
+    }))
+    .then( axios.request )
+    .then( result => result.data)
+    .then(  funcionarios => {
+        
+        getAtendimentosPorData(data).then(atendimentos => {
+
+            const funcAtendimentos = funcionarios.map( funcionario => {
+                const atendimentosFunc = atendimentos.filter(atendimento => atendimento.tecnico._id === funcionario._id )
+                funcionario.atendimentos = atendimentosFunc;
+                return funcionario;
+            });
+
+            res.json(funcAtendimentos);
+
+        })
+    })
+    .catch( error => next(error) )
     
+}
+
+const getAtendimentosPorData = ( data ) => {
+
+    const dataObj = new Date(data);
+
+    return Atendimentos.find({})
+    .where('data_atendimento')
+    .gte(new Date(dataObj.getFullYear(), dataObj.getMonth(), dataObj.getDate()))
+    .lt(new Date(dataObj.getFullYear(), dataObj.getMonth(), dataObj.getDate() + 1 ))
+
 }
 
 

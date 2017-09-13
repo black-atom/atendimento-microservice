@@ -5,7 +5,7 @@ const Atendimentos = require('../models/atendimentos');
 const { prop } = require('ramda');
 
 const storage = multer.diskStorage({
-  destination: 'public/images',
+  destination: 'public/imagens',
   filename: function (req, file, cb) {
     crypto.pseudoRandomBytes(16, function (err, raw) {
       if (err) return cb(err)
@@ -21,7 +21,7 @@ const uploadingHandler = multer({
 }).single("file");
 
 const atendimentoUpload = ( req, res, next ) => {
-    const id = prop("id", req.params);
+    const id = prop("id", req.params) || '599364106d357012f81bbaea';
     const filename = prop("filename", req.file);
 
     Atendimentos.findById(id)
@@ -38,4 +38,3 @@ module.exports = {
     atendimentoUpload, 
     uploadingHandler
 }
-
