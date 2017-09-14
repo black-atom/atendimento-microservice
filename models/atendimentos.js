@@ -124,7 +124,7 @@ const atendimentoSchema = new Schema({
         type: String, 
         default: "" 
     },
-    inicio: {
+    km_inicio: {
         km: {
             type: Number, 
             default: ""
@@ -134,7 +134,7 @@ const atendimentoSchema = new Schema({
             default: ""
         }
     },
-    fim: {
+    km_final: {
         km: {
             type: Number, 
             default: ""
@@ -143,10 +143,25 @@ const atendimentoSchema = new Schema({
             type: Date, 
             default: ""
         }
+    },
+    incio: {
+            type: Date, 
+            default: ""
+      
+    },
+    fim: {
+            type: Date, 
+            default: ""
     },
     estado: {
         type: String, 
-        enum: ['associado', 'em_descolamento', 'chegou_ao_destino', 'inicio_atendimento', 'fim_do_atendimento'],
+        enum: [
+            'associado', 
+            'em_descolamento', 
+            'chegou_ao_destino', 
+            'inicio_atendimento', 
+            'fim_do_atendimento'
+        ],
         default: 'associado'
     },
     encaixe: {
