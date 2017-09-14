@@ -103,6 +103,10 @@ const atendimentoSchema = new Schema({
         type: Number, 
         default: ""
     },
+    autorizado: {
+        type: Number, 
+        default: ""
+    },
     avaliacao: {
         type: [{
             pergunta: {
