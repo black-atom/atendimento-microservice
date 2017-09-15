@@ -10,7 +10,6 @@ route.post('/atendimentos', atendimentoController.atendimentoNew);
 route.put('/atendimentos/:id', atendimentoController.updateAtendimento);
 route.get('/funcionariosatendimentos/', atendimentoController.getTodosAtendimentosDosEmpregados);
 route.post('/atendimentos/:id/imagens', uploadController.uploadingHandler, uploadController.atendimentoUpload)
-route.use('/atendimentoimagens', express.static('public/imagens'));
 
 //route.put('/atendimentos/funcionario/:id', atendimentoController.getUPFromUddnwind);
 

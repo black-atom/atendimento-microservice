@@ -144,7 +144,7 @@ const atendimentoSchema = new Schema({
             default: ""
         }
     },
-    incio: {
+    inicio: {
             type: Date, 
             default: ""
       
