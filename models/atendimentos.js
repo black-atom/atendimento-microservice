@@ -164,14 +164,15 @@ const atendimentoSchema = new Schema({
         ],
         default: 'associado'
     },
-    encaixe: {
-        type: Boolean, 
-        default: false
-    },
-    inativo: {
-        statos: {
-            type: Boolean, 
-            default: false
+    situacao: {
+        status: {
+            type: String, 
+            enum: [  
+                'cancelar',
+                'reagendar',
+                'encaixe'
+            ],
+            default: ''
         },
         motivo: {
             type: String, 
