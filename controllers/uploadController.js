@@ -23,10 +23,15 @@ const uploadingHandler = multer({
 const atendimentoUpload = ( req, res, next ) => {
     const id = prop("id", req.params) || '599364106d357012f81bbaea';
     const filename = prop("filename", req.file);
+    const tipo = req.body.tipo || 'inicio_atendimento';
+
 
     Atendimentos.findById(id)
     .then(atendimento => {
-        atendimento.imagens.push(filename);
+        atendimento.imagens.push({
+          url: filename,
+          tipo 
+        });
         return atendimento.save();
     })
     .then(atendimento => res.json(atendimento))

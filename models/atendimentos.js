@@ -50,7 +50,10 @@ const atendimentoSchema = new Schema({
         required: [true, "Entre com os dados do endereco"]
     },
     imagens: {
-        type: [String],
+        type: [{
+            tipo: String,
+            url: String
+        }],
         default: []
     },
     contato: {
