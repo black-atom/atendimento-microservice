@@ -107,7 +107,7 @@ const atendimentoSchema = new Schema({
         default: ""
     },
     autorizado: {
-        type: Number, 
+        type: String, 
         default: ""
     },
     avaliacao: {
