@@ -106,7 +106,7 @@ const atendimentoSchema = new Schema({
         default: ""
     },
     autorizado: {
-        type: Number, 
+        type: String, 
         default: ""
     },
     avaliacao: {
@@ -172,9 +172,10 @@ const atendimentoSchema = new Schema({
             enum: [  
                 'cancelar',
                 'reagendar',
-                'encaixe'
+                'encaixe',
+                'aberto'
             ],
-            default: ''
+            default: 'aberto'
         },
         motivo: {
             type: String, 
