@@ -18,7 +18,7 @@ const contatoSchema  = new Schema({
     email: { type: String, default: "" },
     celular: { type: String, default: "" },
     telefone: {type: String, required: [true, "Entre com o telefone de contato!"]},
-    nome: {type: String, required: [true, "Entre com o nome para contato!"]},
+    nome: {type: String},
     observacao: { type: String, default: "" },
 })
 
@@ -81,7 +81,6 @@ const atendimentoSchema = new Schema({
     },
     numero_equipamento: {
         type: String, 
-        required: [true, "Entre com o número do equipamento"],
         default: ""
     },
     estacionamento: {
@@ -181,17 +180,7 @@ const atendimentoSchema = new Schema({
             type: String, 
             default: ""
         }
-    },
-
-    // tecnicoAcompanhante: {
-    //     _id: {
-    //         type: Schema.Types.ObjectId
-    //     },
-    //     cnpj_cpf: {
-    //         type: String, 
-    //         required: [true, "Entre com o cnpj/cpf do cliente"]
-    //     },
-    // },
+    }
 }, { versionKey: false });
 
 atendimentoSchema.plugin(timestamps);
