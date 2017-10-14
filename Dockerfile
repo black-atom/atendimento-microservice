@@ -14,5 +14,6 @@ ENV DB_URL="mongodb://172.17.0.1/test"
 RUN yarn
 
 EXPOSE 3000
+VOLUME /usr/src/app/public/imagens
 
 CMD [ "bin/www" ]
