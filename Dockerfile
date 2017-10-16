@@ -2,6 +2,11 @@ FROM node:alpine
 
 MAINTAINER Vitor Silva Lima <vitor.lima2@fatec.sp.gov.br>
 
+
+RUN apk add --update tzdata
+ENV TZ=America/Sao_Paulo
+RUN rm -rf /var/cache/apk/*
+
 ADD . /usr/src/app
 
 WORKDIR /usr/src/app
