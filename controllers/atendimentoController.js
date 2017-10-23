@@ -33,7 +33,9 @@ const updateAtendimento = ( req, res, next ) => {
     const atendimento = prop("body", req);
     const _id = prop("id", req.params);
 
-    Atendimentos.findByIdAndUpdate(_id, atendimento)
+    Atendimentos.findByIdAndUpdate(_id, atendimento, {
+        runValidators: true
+    })
     .then(updatedAtendimento => updatedAtendimento._id)
     .then(id => Atendimentos.findById(id))
     .then( updatedData => res.json(updatedData) )
