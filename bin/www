@@ -7,7 +7,9 @@
 const app = require('../app');
 const debug = require('debug')('cliente-backend:server');
 const http = require('http');
-const io = require('../socket-io/io.js');
+const monitoracao = require('../socket-io/monitoracao');
+var io = require('socket.io');
+
 
 /**
  * Get port from environment and store in Express.
@@ -21,7 +23,7 @@ app.set('port', port);
  */
 
 const server = http.createServer(app);
-global.io = io(server);
+monitoracao.setIO(io(server))
 
 /**
  * Listen on provided port, on all network interfaces.

@@ -10,7 +10,6 @@ const getAll = ( req, res, next ) => {
     Atendimentos.find(req.query)
     .then( atendimentos => {
         //const _io = io;
-        io.enviarUpdateTecnico(321321321);
         res.json( atendimentos ) 
     })
     .catch( error => next(error) )
