@@ -3,6 +3,7 @@ const { prop } = require('ramda');
 const multer = require('multer');
 const Promise = require('bluebird');
 const axios = require('axios');
+const formatAtendimento = require('../utils/atendimentoSpec');
 
 
 const getAll = ( req, res, next ) => {
@@ -19,7 +20,7 @@ const getAll = ( req, res, next ) => {
 
 const atendimentoNew = ( req, res, next ) => {
 
-    const atendimento = prop("body", req);
+    const atendimento = formatAtendimento(req.body);
     const atendimentoModel = new Atendimentos(atendimento);
 
     atendimentoModel.save()
@@ -30,7 +31,7 @@ const atendimentoNew = ( req, res, next ) => {
 
 const updateAtendimento = ( req, res, next ) => {
 
-    const atendimento = prop("body", req);
+    const atendimento = formatAtendimento(req.body);
     const _id = prop("id", req.params);
 
     Atendimentos.findByIdAndUpdate(_id, atendimento, {
