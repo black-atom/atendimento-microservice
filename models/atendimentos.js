@@ -181,8 +181,99 @@ const atendimentoSchema = new Schema({
             type: String, 
             default: ""
         }
-    }
-}, { versionKey: false });
+    },
+    retorno: {
+        type: {
+            retornar: {
+                type: Boolean,
+                default: false
+            },
+            motivo: {
+                type: String,
+                default: ""
+            }
+        }
+    },
+    relatorio_tecnico: {
+        relatorio: {
+            type: String,
+            default: ""
+        }
+    },
+    treinamento: {
+        type: {
+            interrupcoes: {
+                type: Boolean,
+                default: false
+            },
+            cadastros: {
+                type: Boolean,
+                default: false
+            },
+            relatorios: {
+                type: Boolean,
+                default: false
+            },
+            importacao_dados: {
+                type: Boolean,
+                default: false
+            },
+            parametros_gerais: {
+                type: Boolean,
+                default: false
+            },
+            abonos_justificativas: {
+                type: Boolean,
+                default: false,
+            },
+            backup_sistema: {
+                type: Boolean, 
+                default: false
+            },
+            software: {
+                type: String,
+                default: ""
+            },
+            caminho: {
+                type: String,
+                default: ""
+            }
+        }
+    },
+    remocao_relogio: {
+        type: {
+            retirado: {
+                type: Boolean,
+                default: false
+            },
+            chave: {
+                type: Boolean,
+                default: false
+            },
+            bateria: {
+                type: Boolean,
+                default: false
+            },
+            bobina: {
+                type: Boolean,
+                default: false
+            },
+            fonte: {
+                type: Boolean,
+                default: false
+            },
+            pino: {
+                type: Boolean,
+                default: false
+            },
+            impressora: {
+                type: Boolean,
+                default: false
+            }
+        }
+    },
+},
+ { versionKey: false });
 
 atendimentoSchema.plugin(timestamps);
 atendimentoSchema.plugin(userAudit);
