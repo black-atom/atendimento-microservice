@@ -6,28 +6,66 @@ const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');
 
 const getAll = (req, res, next) => {
-  if (req.query.associado && req.query.data) {
-    Atendimentos.find({
-      data_atendimento: { $eq: req.query.data },
-      "tecnico.nome": { $exists: true, $ne: "" }
-    })
-      .then(atendimentos => {
-        res.json(atendimentos);
-      })
-      .catch(error => next(error));
-  } else if (req.query.associado) {
-    Atendimentos.find({ "tecnico.nome": { $exists: true, $ne: "" } })
-      .then(atendimentos => {
-        res.json(atendimentos);
-      })
-      .catch(error => next(error));
-  } else {
-    Atendimentos.find(req.query)
-      .then(atendimentos => {
-        res.json(atendimentos);
-      })
-      .catch(error => next(error));
-  }
+
+// busca todos atendimentos que estao associado ao tecnico por data
+ if(req.query.data) {
+  Atendimentos.find( {
+          data_atendimento: { $eq: req.query.data },
+          "tecnico.nome": { $exists: true, $ne: "" }
+        },
+    {
+            _id: 1,
+            "cliente.nome_razao_social": 1,
+            "cliente.cnpj_cpf": 1,
+            "endereco.cidade": 1,
+            "endereco.bairro": 1,
+            tipo: 1,
+            estado: 1,
+            avaliacao: 1,
+            tecnico: 1,
+            createdBy: 1,
+            data_atendimento: 1,
+          }
+  ).then(atendimentos => res.json(atendimentos))
+ }
+
+ // busca todos atendimentos que estao associado ao tecnico
+ else if(req.query.associado) {
+  Atendimentos.find(  {"tecnico.nome": { $exists: true, $ne: "" }} ,
+    {
+            _id: 1,
+            "cliente.nome_razao_social": 1,
+            "cliente.cnpj_cpf": 1,
+            "endereco.cidade": 1,
+            "endereco.bairro": 1,
+            tipo: 1,
+            estado: 1,
+            avaliacao: 1,
+            tecnico: 1,
+            createdBy: 1,
+            data_atendimento: 1,
+          }
+  ).then(atendimentos => res.json(atendimentos))
+ }
+
+// busca todos os atendimentos
+else {
+  Atendimentos.find({},
+    {
+            _id: 1,
+            "cliente.nome_razao_social": 1,
+            "cliente.cnpj_cpf": 1,
+            "endereco.cidade": 1,
+            "endereco.bairro": 1,
+            tipo: 1,
+            estado: 1,
+            avaliacao: 1,
+            tecnico: 1,
+            createdBy: 1,
+            data_atendimento: 1,
+          }
+  ).then(atendimentos => res.json(atendimentos))
+ }
 };
 
 const atendimentoNew = (req, res, next) => {
