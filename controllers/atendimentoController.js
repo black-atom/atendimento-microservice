@@ -25,6 +25,7 @@ const getAll = (req, res, next) => {
             tecnico: 1,
             createdBy: 1,
             data_atendimento: 1,
+            situacao: 1
           }
   ).then(atendimentos => res.json(atendimentos))
  }
@@ -44,6 +45,7 @@ const getAll = (req, res, next) => {
             tecnico: 1,
             createdBy: 1,
             data_atendimento: 1,
+            situacao: 1
           }
   ).then(atendimentos => res.json(atendimentos))
  }
@@ -63,6 +65,7 @@ else {
             tecnico: 1,
             createdBy: 1,
             data_atendimento: 1,
+            situacao: 1
           }
   ).then(atendimentos => res.json(atendimentos))
  }
