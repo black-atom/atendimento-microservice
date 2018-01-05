@@ -10,8 +10,6 @@ const roleMiddlware = (roles = ['administrador']) => (req, res, next) => {
 
     if(req.login && !authConfig.bypass){
         const { tipo } = req.login
-        console.log('tipo =====>', tipo)
-
         if(tipo && Array.isArray(tipo)){
             const temRole = roles.includes('all') || tipo.some( roleUser => roles.includes(roleUser))
             if(temRole){
