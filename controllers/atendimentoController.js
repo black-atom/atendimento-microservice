@@ -6,27 +6,49 @@ const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');
 
 const getAll = (req, res, next) => {
-  if (req.query.associado && req.query.data) {
-    Atendimentos.find({
-      data_atendimento: { $eq: req.query.data },
-      "tecnico.nome": { $exists: true, $ne: "" }
-    })
-      .then(atendimentos => {
-        res.json(atendimentos);
-      })
-      .catch(error => next(error));
-  } else if (req.query.associado) {
-    Atendimentos.find({ "tecnico.nome": { $exists: true, $ne: "" } })
-      .then(atendimentos => {
-        res.json(atendimentos);
-      })
-      .catch(error => next(error));
+  if (req.query.skip || req.query.limit) {
+    const limit = parseInt(req.query.limit);
+    const skip = parseInt(req.query.skip);
+
+    if (req.query.skip && req.query.limit) {
+      Atendimentos.find()
+        .skip(skip)
+        .limit(limit)
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    } else {
+      Atendimentos.find()
+        .limit(limit)
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    }
   } else {
-    Atendimentos.find(req.query)
-      .then(atendimentos => {
-        res.json(atendimentos);
+    if (req.query.associado && req.query.data) {
+      Atendimentos.find({
+        data_atendimento: { $eq: req.query.data },
+        'tecnico.nome': { $exists: true, $ne: '' }
       })
-      .catch(error => next(error));
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    } else if (req.query.associado) {
+      Atendimentos.find({ 'tecnico.nome': { $exists: true, $ne: '' } })
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    } else {
+      Atendimentos.find(req.query)
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    }
   }
 };
 
