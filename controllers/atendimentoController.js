@@ -3,29 +3,47 @@ const { prop } = require('ramda');
 const multer = require('multer');
 const Promise = require('bluebird');
 const axios = require('axios');
-const formatAtendimento = require('../utils/atendimentoSpec');
+const formatAtendimento = require('../utils/atendimentoSpec');    
 
 const getAll = (req, res, next) => {
   if (req.query.skip || req.query.limit) {
+
     const limit = parseInt(req.query.limit);
     const skip = parseInt(req.query.skip);
-
+    
     if (req.query.skip && req.query.limit) {
-      Atendimentos.find()
+
+      Promise.all([
+        Atendimentos
+        .find()
         .skip(skip)
         .limit(limit)
-        .then(atendimentos => {
-          res.json(atendimentos);
-        })
-        .catch(error => next(error));
+        .exec(),
+        Atendimentos
+        .count()
+        .exec()
+      ]).spread((atendimentos, count) => {
+        res.json(200, { atendimentos , count } )
+      })
+      .catch(error => next(error));
+
     } else {
-      Atendimentos.find()
+
+      Promise.all([
+        Atendimentos
+        .find()
         .limit(limit)
-        .then(atendimentos => {
-          res.json(atendimentos);
-        })
-        .catch(error => next(error));
+        .exec(),
+        Atendimentos
+        .count()
+        .exec()
+      ]).spread((atendimentos, count) => {
+        res.json(200, { atendimentos , count } )
+      })
+      .catch(error => next(error));
+      
     }
+
   } else {
     if (req.query.associado && req.query.data) {
       Atendimentos.find({
