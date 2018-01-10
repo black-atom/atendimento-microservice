@@ -6,16 +6,18 @@ const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');    
 
 const getAll = (req, res, next) => {
-  if (req.query.skip || req.query.limit) {
 
-    const limit = parseInt(req.query.limit);
-    const skip = parseInt(req.query.skip);
-    
-    if (req.query.skip && req.query.limit) {
+console.log(req.query);
+const limit = parseInt(req.query.limit);
+const skip = parseInt(req.query.skip);
+const search = req.query.search;
 
-      Promise.all([
+   if (skip || limit) {
+
+    if (skip && limit) {
+        Promise.all([
         Atendimentos
-        .find()
+        .find(search)
         .skip(skip)
         .limit(limit)
         .exec(),
@@ -28,10 +30,10 @@ const getAll = (req, res, next) => {
       .catch(error => next(error));
 
     } else {
-
-      Promise.all([
+    
+        Promise.all([
         Atendimentos
-        .find()
+        .find(search)
         .limit(limit)
         .exec(),
         Atendimentos
@@ -45,6 +47,7 @@ const getAll = (req, res, next) => {
     }
 
   } else {
+
     if (req.query.associado && req.query.data) {
       Atendimentos.find({
         data_atendimento: { $eq: req.query.data },
