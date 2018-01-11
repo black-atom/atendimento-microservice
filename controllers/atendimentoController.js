@@ -8,7 +8,14 @@ const formatAtendimento = require('../utils/atendimentoSpec');
 const getAll = (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  const search = JSON.parse(req.query.search);
+  let search = JSON.parse(req.query.search);
+  for(key in search){
+    search = {
+      ...search,
+      [key]: new RegExp('^'+ search[key]+'$', "i")
+    }
+  }
+
   if (skip || limit) {
     if (skip && limit) {
       Promise.all([
@@ -16,7 +23,7 @@ const getAll = (req, res, next) => {
           .skip(skip)
           .limit(limit)
           .exec(),
-        Atendimentos.count().exec()
+        Atendimentos.find(search).count().exec()
       ])
         .spread((atendimentos, count) => {
           res.json(200, { atendimentos, count });
@@ -27,7 +34,7 @@ const getAll = (req, res, next) => {
         Atendimentos.find(search)
           .limit(limit)
           .exec(),
-        Atendimentos.count().exec()
+        Atendimentos.find(search).count().exec()
       ])
         .spread((atendimentos, count) => {
           res.json(200, { atendimentos, count });
