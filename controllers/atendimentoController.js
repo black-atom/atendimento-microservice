@@ -14,7 +14,6 @@ const getAll = (req, res, next) => {
     if(key !== "data_atendimento"){
       valor = new RegExp('^'+ valor +'$', "i")
     }
-
     search = {
       ...search,
       [key]: valor
@@ -24,7 +23,7 @@ const getAll = (req, res, next) => {
   if (skip || limit) {
     if (skip && limit) {
       Promise.all([
-        Atendimentos.find(search)
+        Atendimentos.find(search).sort( { data_atendimento: -1 } )
           .skip(skip)
           .limit(limit)
           .exec(),
@@ -36,7 +35,7 @@ const getAll = (req, res, next) => {
         .catch(error => next(error));
     } else {
       Promise.all([
-        Atendimentos.find(search)
+        Atendimentos.find(search).sort( { data_atendimento: -1 } )
           .limit(limit)
           .exec(),
         Atendimentos.find(search).count().exec()
