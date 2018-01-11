@@ -3,51 +3,38 @@ const { prop } = require('ramda');
 const multer = require('multer');
 const Promise = require('bluebird');
 const axios = require('axios');
-const formatAtendimento = require('../utils/atendimentoSpec');    
+const formatAtendimento = require('../utils/atendimentoSpec');
 
 const getAll = (req, res, next) => {
-
-console.log(req.query);
-const limit = parseInt(req.query.limit);
-const skip = parseInt(req.query.skip);
-const search = req.query.search;
-
-   if (skip || limit) {
-
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  const search = JSON.parse(req.query.search);
+  if (skip || limit) {
     if (skip && limit) {
-        Promise.all([
-        Atendimentos
-        .find(search)
-        .skip(skip)
-        .limit(limit)
-        .exec(),
-        Atendimentos
-        .count()
-        .exec()
-      ]).spread((atendimentos, count) => {
-        res.json(200, { atendimentos , count } )
-      })
-      .catch(error => next(error));
-
+      Promise.all([
+        Atendimentos.find(search)
+          .skip(skip)
+          .limit(limit)
+          .exec(),
+        Atendimentos.count().exec()
+      ])
+        .spread((atendimentos, count) => {
+          res.json(200, { atendimentos, count });
+        })
+        .catch(error => next(error));
     } else {
-    
-        Promise.all([
-        Atendimentos
-        .find(search)
-        .limit(limit)
-        .exec(),
-        Atendimentos
-        .count()
-        .exec()
-      ]).spread((atendimentos, count) => {
-        res.json(200, { atendimentos , count } )
-      })
-      .catch(error => next(error));
-      
+      Promise.all([
+        Atendimentos.find(search)
+          .limit(limit)
+          .exec(),
+        Atendimentos.count().exec()
+      ])
+        .spread((atendimentos, count) => {
+          res.json(200, { atendimentos, count });
+        })
+        .catch(error => next(error));
     }
-
   } else {
-
     if (req.query.associado && req.query.data) {
       Atendimentos.find({
         data_atendimento: { $eq: req.query.data },
