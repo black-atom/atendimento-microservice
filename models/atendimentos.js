@@ -162,9 +162,10 @@ const atendimentoSchema = new Schema({
             'em_descolamento', 
             'chegou_ao_destino', 
             'inicio_atendimento', 
-            'fim_do_atendimento'
+            'fim_do_atendimento',
+            'aberto'
         ],
-        default: 'associado'
+        default: 'aberto'
     },
     situacao: {
         status: {
