@@ -6,27 +6,69 @@ const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');
 
 const getAll = (req, res, next) => {
-  if (req.query.associado && req.query.data) {
-    Atendimentos.find({
-      data_atendimento: { $eq: req.query.data },
-      "tecnico.nome": { $exists: true, $ne: "" }
-    })
-      .then(atendimentos => {
-        res.json(atendimentos);
-      })
-      .catch(error => next(error));
-  } else if (req.query.associado) {
-    Atendimentos.find({ "tecnico.nome": { $exists: true, $ne: "" } })
-      .then(atendimentos => {
-        res.json(atendimentos);
-      })
-      .catch(error => next(error));
+  const limit = parseInt(req.query.limit);
+  const skip = parseInt(req.query.skip);
+  let search = JSON.parse(req.query.search);
+  for(key in search){
+    let valor = search[key];
+    if(key !== "data_atendimento"){
+      valor = new RegExp('^'+ valor +'$', "i")
+    }
+
+    search = {
+      ...search,
+      [key]: valor
+    }
+  }
+
+  if (skip || limit) {
+    if (skip && limit) {
+      Promise.all([
+        Atendimentos.find(search)
+          .skip(skip)
+          .limit(limit)
+          .exec(),
+        Atendimentos.find(search).count().exec()
+      ])
+        .spread((atendimentos, count) => {
+          res.json(200, { atendimentos, count });
+        })
+        .catch(error => next(error));
+    } else {
+      Promise.all([
+        Atendimentos.find(search)
+          .limit(limit)
+          .exec(),
+        Atendimentos.find(search).count().exec()
+      ])
+        .spread((atendimentos, count) => {
+          res.json(200, { atendimentos, count });
+        })
+        .catch(error => next(error));
+    }
   } else {
-    Atendimentos.find(req.query)
-      .then(atendimentos => {
-        res.json(atendimentos);
+    if (req.query.associado && req.query.data) {
+      Atendimentos.find({
+        data_atendimento: { $eq: req.query.data },
+        'tecnico.nome': { $exists: true, $ne: '' }
       })
-      .catch(error => next(error));
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    } else if (req.query.associado) {
+      Atendimentos.find({ 'tecnico.nome': { $exists: true, $ne: '' } })
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    } else {
+      Atendimentos.find(req.query)
+        .then(atendimentos => {
+          res.json(atendimentos);
+        })
+        .catch(error => next(error));
+    }
   }
 };
 
