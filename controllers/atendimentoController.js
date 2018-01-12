@@ -8,15 +8,17 @@ const formatAtendimento = require('../utils/atendimentoSpec');
 const getAll = (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  let search = JSON.parse(req.query.search);
-  for(key in search){
-    let valor = search[key];
-    if(key !== "data_atendimento"){
-      valor = new RegExp('^'+ valor +'$', "i")
-    }
-    search = {
-      ...search,
-      [key]: valor
+  if(req.query.search) {
+    let search = JSON.parse(req.query.search);
+    for(key in search){
+      let valor = search[key];
+      if(key !== "data_atendimento"){
+        valor = new RegExp('^'+ valor +'$', "i")
+      }
+      search = {
+        ...search,
+        [key]: valor
+      }
     }
   }
 
