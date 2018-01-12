@@ -8,7 +8,7 @@ const formatAtendimento = require('../utils/atendimentoSpec');
 const getAll = (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
-  if(req.query.search) {
+
     let search = JSON.parse(req.query.search);
     for(key in search){
       let valor = search[key];
@@ -20,7 +20,7 @@ const getAll = (req, res, next) => {
         [key]: valor
       }
     }
-  }
+  
 
   if (skip || limit) {
     if (skip && limit) {
