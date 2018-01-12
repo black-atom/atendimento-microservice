@@ -13,7 +13,7 @@ const getAll = (req, res, next) => {
     for(key in search){
       let valor = search[key];
       if(key !== "data_atendimento"){
-        valor = new RegExp('^'+ valor +'$', "i")
+        valor = new RegExp(''+ valor +'', "i")
       }
       search = {
         ...search,
@@ -21,6 +21,7 @@ const getAll = (req, res, next) => {
       }
     }
   
+    console.log(search);
 
   if (skip || limit) {
     if (skip && limit) {
