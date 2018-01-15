@@ -159,6 +159,7 @@ const atendimentoSchema = new Schema({
         type: String, 
         enum: [
             'aberto',
+            'cancelar',
             'associado', 
             'em_descolamento', 
             'chegou_ao_destino', 
