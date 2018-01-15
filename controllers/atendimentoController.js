@@ -12,16 +12,16 @@ const getAll = (req, res, next) => {
     let search = JSON.parse(req.query.search);
     for(key in search){
       let valor = search[key];
-      if(key !== "data_atendimento"){
+      if(key !== "data_atendimento" && search[key] !== 'null' && search[key] !== null){
         valor = new RegExp(''+ valor +'', "i")
+      }else if(search[key] === 'null') {
+        valor = null
       }
       search = {
         ...search,
         [key]: valor
       }
     }
-  
-    console.log(search);
 
   if (skip || limit) {
     if (skip && limit) {
@@ -49,23 +49,25 @@ const getAll = (req, res, next) => {
         .catch(error => next(error));
     }
   } else {
+
     if (req.query.associado && req.query.data) {
       Atendimentos.find({
         data_atendimento: { $eq: req.query.data },
-        'tecnico.nome': { $exists: true, $ne: '' }
+        'tecnico.nome': { $exists: true, $ne: null }
       })
         .then(atendimentos => {
           res.json(atendimentos);
         })
         .catch(error => next(error));
     } else if (req.query.associado) {
-      Atendimentos.find({ 'tecnico.nome': { $exists: true, $ne: '' } })
+      Atendimentos.find({ 'tecnico.nome': { $exists: true, $ne: null } })
         .then(atendimentos => {
           res.json(atendimentos);
         })
         .catch(error => next(error));
     } else {
-      Atendimentos.find(req.query)
+      console.log(search);
+       Atendimentos.find(search)
         .then(atendimentos => {
           res.json(atendimentos);
         })
