@@ -94,7 +94,7 @@ const atendimentoSchema = new Schema({
         },
         nome: {
             type: String,
-            default:""
+            default: null
         },
     },
     tipo: {
@@ -158,6 +158,7 @@ const atendimentoSchema = new Schema({
     estado: {
         type: String, 
         enum: [
+            'aberto',
             'associado', 
             'em_descolamento', 
             'chegou_ao_destino', 
