@@ -9,6 +9,8 @@ const getAll = (req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
 
+  if (skip || limit) {
+
     let search = JSON.parse(req.query.search);
     for(key in search){
       let valor = search[key];
@@ -22,8 +24,7 @@ const getAll = (req, res, next) => {
         [key]: valor
       }
     }
-
-  if (skip || limit) {
+    
     if (skip && limit) {
       Promise.all([
         Atendimentos.find(search).sort( { data_atendimento: -1 } )
@@ -66,8 +67,7 @@ const getAll = (req, res, next) => {
         })
         .catch(error => next(error));
     } else {
-      console.log(search);
-       Atendimentos.find(search)
+       Atendimentos.find(req.query)
         .then(atendimentos => {
           res.json(atendimentos);
         })
