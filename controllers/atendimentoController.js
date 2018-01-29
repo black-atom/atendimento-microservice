@@ -5,74 +5,31 @@ const Promise = require('bluebird');
 const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');
 
-const getAll = (req, res, next) => {
+const getAll = async(req, res, next) => {
+
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip);
+  
+  let query = { ...req.query };
+  delete query.skip;
+  delete query.limit;
 
-  if (skip || limit) {
+  for (key in query) {
+    let valor = query[key];
+    if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null) {
+      valor = new RegExp("" + valor + "", "i");
+    } else if (query[key] === "null") {
+      valor = null;
+    }
+    query = { ...query, [key]: valor };
+  }
 
-    let search = JSON.parse(req.query.search);
-    for(key in search){
-      let valor = search[key];
-      if(key !== "data_atendimento" && search[key] !== 'null' && search[key] !== null){
-        valor = new RegExp(''+ valor +'', "i")
-      }else if(search[key] === 'null') {
-        valor = null
-      }
-      search = {
-        ...search,
-        [key]: valor
-      }
-    }
-    
-    if (skip && limit) {
-      Promise.all([
-        Atendimentos.find(search).sort( { data_atendimento: -1 } )
-          .skip(skip)
-          .limit(limit)
-          .exec(),
-        Atendimentos.find(search).count().exec()
-      ])
-        .spread((atendimentos, count) => {
-          res.json(200, { atendimentos, count });
-        })
-        .catch(error => next(error));
-    } else {
-      Promise.all([
-        Atendimentos.find(search).sort( { data_atendimento: -1 } )
-          .limit(limit)
-          .exec(),
-        Atendimentos.find(search).count().exec()
-      ])
-        .spread((atendimentos, count) => {
-          res.json(200, { atendimentos, count });
-        })
-        .catch(error => next(error));
-    }
-  } else {
-
-    if (req.query.associado && req.query.data) {
-      Atendimentos.find({
-        data_atendimento: { $eq: req.query.data },
-        'tecnico.nome': { $exists: true, $ne: null }
-      })
-        .then(atendimentos => {
-          res.json(atendimentos);
-        })
-        .catch(error => next(error));
-    } else if (req.query.associado) {
-      Atendimentos.find({ 'tecnico.nome': { $exists: true, $ne: null } })
-        .then(atendimentos => {
-          res.json(atendimentos);
-        })
-        .catch(error => next(error));
-    } else {
-       Atendimentos.find(req.query)
-        .then(atendimentos => {
-          res.json(atendimentos);
-        })
-        .catch(error => next(error));
-    }
+  try {
+    const atendimentos = await Atendimentos.find(query).skip(skip).limit(limit).sort( { data_atendimento: -1 } )
+    const count = await Atendimentos.find(query).count()
+    res.json({ atendimentos, count });
+  } catch (error) {
+      next(error)
   }
 };
 
