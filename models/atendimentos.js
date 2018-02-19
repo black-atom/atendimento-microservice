@@ -89,6 +89,7 @@ const atendimentoSchema = new Schema({
     tipo               : { type: String, default: '' },
     valor              : { type: Number, default: '' },
     autorizado         : { type: String, default: '' },
+    garantia           : { type: Schema.Types.Date, default: '' },
     observacao         : { type: String, default: '' },
     estado             : { type: String, enum: ["agendado", "cancelado", "associado"], default: "agendado" },
     interacao_tecnico  : { type: interacaoTecnicoSChema, required: [true, "Entre com os dados do tecnico!"], default: {} },

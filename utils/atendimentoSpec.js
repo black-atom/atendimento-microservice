@@ -21,6 +21,7 @@ const atendimentoSpec = {
   avaliacao: prop('avaliacao'),
   autorizado: prop('autorizado'),
   valor: prop('valor'),
+  garantia: prop('garantia'),
   tipo: prop('tipo'),
   tecnico: prop('tecnico'),
   situacao: prop('situacao'),
