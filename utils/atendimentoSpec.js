@@ -21,14 +21,12 @@ const atendimentoSpec = {
   avaliacao: prop('avaliacao'),
   autorizado: prop('autorizado'),
   valor: prop('valor'),
+  garantia: prop('garantia'),
   tipo: prop('tipo'),
   tecnico: prop('tecnico'),
-  situacao: prop('situacao'),
   estado: prop('estado'),
-  fim: prop('fim'),
-  inicio: prop('inicio'),
-  km_final: prop('km_final'),
-  km_inicio: prop('km_inicio'),
+  interacao_tecnico: prop('interacao_tecnico'),
+  motivos: prop('motivos'),
   createdBy: prop('createdBy'),
   updatedBy: prop('updatedBy')
 };
