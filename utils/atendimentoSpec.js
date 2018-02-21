@@ -1,7 +1,7 @@
 const { prop, applySpec, path } = require('ramda');
 
 const removeMask = value => value.replace(/\D+/g, '');
-const removeMaskProp = propName => objeto => removeMask(prop(propName, objeto));
+const removeMaskProp = propName => objeto => objeto[propName] ? removeMask(prop(propName, objeto)) : objeto[propName];
 const clienteProp = propName => objeto => applySpec(clienteSpec)(prop(propName, objeto));
 const contatoProp = propName => objeto => applySpec(contatoSpec)(prop(propName, objeto));
 const enderecoProp = propName => objeto => applySpec(enderecoSpec)(prop(propName, objeto));
