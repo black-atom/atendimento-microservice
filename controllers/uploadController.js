@@ -39,7 +39,22 @@ const atendimentoUpload = ( req, res, next ) => {
     
 };
 
+const assinaturaUpload = ( req, res, next ) => {
+  const id = prop("id", req.params);
+  const filename = prop("filename", req.file);
+
+  Atendimentos.findById(id)
+  .then(atendimento => {
+      atendimento.assinatura.url = filename;
+      return atendimento.save();
+  })
+  .then(atendimento => res.json(atendimento))
+  .catch(error => next(error));
+  
+};
+
 module.exports = {
     atendimentoUpload, 
+    assinaturaUpload,
     uploadingHandler
 }

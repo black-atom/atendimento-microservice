@@ -10,7 +10,8 @@ route.get('/atendimentos/:id', rolesMiddleware(['all']), atendimentoController.g
 route.post('/atendimentos', rolesMiddleware(['all']), atendimentoController.atendimentoNew);
 route.put('/atendimentos/:id', rolesMiddleware(['all']), atendimentoController.updateAtendimento);
 route.get('/funcionariosatendimentos/', rolesMiddleware(['all']), atendimentoController.getTodosAtendimentosDosEmpregados);
-route.post('/atendimentos/:id/imagens', rolesMiddleware(['all']), uploadController.uploadingHandler, uploadController.atendimentoUpload)
+route.post('/atendimentos/:id/imagens', rolesMiddleware(['all']), uploadController.uploadingHandler, uploadController.atendimentoUpload);
+route.post('/atendimentos/:id/assinaturas', rolesMiddleware(['all']), uploadController.uploadingHandler, uploadController.assinaturaUpload);
 
 //route.put('/atendimentos/funcionario/:id', atendimentoController.getUPFromUddnwind);
 

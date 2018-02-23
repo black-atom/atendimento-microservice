@@ -58,8 +58,6 @@ app.use(baseUri, atendimentoRoute);
 
 app.use('/atendimentoimagens', express.static('public/imagens'));
 
-
-
 app.use((err, req, res, next) => {
 	if(err.name === 'MongoError'){
 		err.status = 500;

@@ -73,9 +73,20 @@ const clienteSchema = new Schema({
 //***************** Cliente Schema end ********************* */
 
 
+//***************** Assinatura Schema ************************* */
+const assinaturaSchema = new Schema({
+  nome                  : { type: String, required: [true, "Entre com o nome do responsavel"], default: '' },
+  sobrenome             : { type: String, required: [true, "Entre com o sobrenome do responsavel"], default: '' },
+  documento_id          : { type: String, required: [true, "Entre com o rg do responsavel"], default: '' },
+  url                   : { type: String, required: [true, "Entre com o imagem da assinatura"], default: '' },
+})
+//***************** assinatura Schema end ********************* */
+
+
 
 //***************** Atendimento Schema ********************* */
 const atendimentoSchema = new Schema({
+    assinatura         : { type: assinaturaSchema, required: [true, "Entre com os dados da assinatura"] },
     cliente            : { type: clienteSchema, required: [true, "Entre com os dados de contato"] },
     endereco           : { type: enderecoSchema, required: [true, "Entre com os dados do endereco"] },
     imagens            : { type: [{ tipo: String, url: String }], default: [] },
@@ -100,6 +111,11 @@ const atendimentoSchema = new Schema({
     avaliacao          : { type: [{ 
       pergunta:              { type: String, required: true }, 
       valor:                 { type: Number, default: '' }}], 
+      default: [] 
+    },
+    motivos            : { type: [{ 
+      estado:                 { type: String, enum: ["cancelado", "reagendado", "encaixe"], required: [true, "Entre com o estado do motivo!"] }, 
+      motivo:                 { type: String, required: [true, "Entre com o motivo!"]}}],
       default: [] 
     },
     motivos            : { type: [{ 
