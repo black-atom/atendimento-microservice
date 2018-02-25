@@ -76,7 +76,6 @@ const clienteSchema = new Schema({
 //***************** Assinatura Schema ************************* */
 const assinaturaSchema = new Schema({
   nome                  : { type: String, required: [true, "Entre com o nome do responsavel"], default: '' },
-  sobrenome             : { type: String, required: [true, "Entre com o sobrenome do responsavel"], default: '' },
   documento_id          : { type: String, required: [true, "Entre com o rg do responsavel"], default: '' },
   url                   : { type: String, required: [true, "Entre com o imagem da assinatura"], default: '' },
 })

@@ -70,7 +70,8 @@ const patchAtendimentos = (req, res, next) => {
     const atendimentosPromise = atendimentosData.map(atendimentoData => {
       return Atendimentos.findByIdAndUpdate(
         atendimentoData._id,
-        atendimentoData
+        atendimentoData,
+        { new: true }
       );
     });
 
