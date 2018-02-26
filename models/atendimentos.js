@@ -75,9 +75,9 @@ const clienteSchema = new Schema({
 
 //***************** Assinatura Schema ************************* */
 const assinaturaSchema = new Schema({
-  nome                  : { type: String, required: [true, "Entre com o nome do responsavel"], default: '' },
-  documento_id          : { type: String, required: [true, "Entre com o rg do responsavel"], default: '' },
-  url                   : { type: String, required: [true, "Entre com o imagem da assinatura"], default: '' },
+  nome                  : { type: String, default: '' },
+  documento_id          : { type: String, default: '' },
+  url                   : { type: String, default: '' },
 })
 //***************** assinatura Schema end ********************* */
 
@@ -85,7 +85,7 @@ const assinaturaSchema = new Schema({
 
 //***************** Atendimento Schema ********************* */
 const atendimentoSchema = new Schema({
-    assinatura         : { type: assinaturaSchema, required: [true, "Entre com os dados da assinatura"] },
+    assinatura         : { type: assinaturaSchema },
     cliente            : { type: clienteSchema, required: [true, "Entre com os dados de contato"] },
     endereco           : { type: enderecoSchema, required: [true, "Entre com os dados do endereco"] },
     imagens            : { type: [{ tipo: String, url: String }], default: [] },
