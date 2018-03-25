@@ -7,6 +7,7 @@ const contatoProp = propName => objeto => applySpec(contatoSpec)(prop(propName, 
 const enderecoProp = propName => objeto => applySpec(enderecoSpec)(prop(propName, objeto));
 
 const atendimentoSpec = {
+  assinatura: prop('assinatura'),
   cliente: clienteProp('cliente'),
   contato: contatoProp('contato'),
   endereco: enderecoProp('endereco'),
