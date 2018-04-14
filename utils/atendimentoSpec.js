@@ -1,4 +1,4 @@
-const { prop, applySpec, path } = require('ramda');
+const { prop, applySpec, path, propOr } = require('ramda');
 
 const removeMask = value => value.replace(/\D+/g, '');
 const removeMaskProp = propName => objeto => objeto[propName] ? removeMask(prop(propName, objeto)) : objeto[propName];
@@ -29,7 +29,8 @@ const atendimentoSpec = {
   interacao_tecnico: prop('interacao_tecnico'),
   motivos: prop('motivos'),
   createdBy: prop('createdBy'),
-  updatedBy: prop('updatedBy')
+  updatedBy: prop('updatedBy'),
+  relatorio: propOr(null, ['relatorio']),
 };
 const clienteSpec = {
   cnpj_cpf: removeMaskProp('cnpj_cpf'),

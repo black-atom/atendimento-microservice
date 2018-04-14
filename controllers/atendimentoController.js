@@ -47,11 +47,11 @@ const updateAtendimento = (req, res, next) => {
   const atendimento = formatAtendimento(req.body);
   const _id = prop('id', req.params);
 
-  Atendimentos.findByIdAndUpdate(_id, atendimento, {
-    runValidators: true
-  })
-    .then(updatedAtendimento => updatedAtendimento._id)
-    .then(id => Atendimentos.findById(id))
+  Atendimentos
+    .findByIdAndUpdate(_id, atendimento, {
+      runValidators: true,
+      new: true,
+    })
     .then(updatedData => res.json(updatedData))
     .catch(error => next(error));
 };

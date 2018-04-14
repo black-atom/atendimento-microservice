@@ -28,37 +28,58 @@ const contatoSchema  = new Schema({
     telefone          : { type: String, required: [true, "Entre com o telefone de contato!"] },
 })
 
-//***************** Contato Schema end ********************* */
 
 
-//***************** Interacao Tecnico Schema *************** */
-const interacaoTecnicoSChema = new Schema({
-    estado            : { type: String, enum: ['em_descolamento', 'chegou_ao_destino', 'inicio_atendimento', 'fim_do_atendimento', ''	], default: '' },
-    relatorio_tecnico : { relatorio: { type: String, default: '' } },
-    retorno           : { retornar: { type: Boolean, default: false }, motivo:   { type: String,  default: ''  }},
-    treinamento       : {
-      interrupcoes:          { type: Boolean, default: false },
-      cadastros:             { type: Boolean, default: false },
-      relatorios:            { type: Boolean, default: false },
-      importacao_dados:      { type: Boolean, default: false },
-      parametros_gerais:     { type: Boolean, default: false },
-      abonos_justificativas: { type: Boolean, default: false },
-      backup_sistema:        { type: Boolean, default: false },
-      software:              { type: String,  default: '' },
-      caminho:               { type: String,  default: '' }
-    },
-    remocao_relogio   : {
-      retirado:              { type: Boolean, default: false },
-      chave:                 { type: Boolean, default: false },
-      bateria:               { type: Boolean, default: false },
-      bobina:                { type: Boolean, default: false },
-      fonte:                 { type: Boolean, default: false },
-      pino:                  { type: Boolean, default: false },
-      impressora:            { type: Boolean, default: false }
-    }
-})
+//***************** Equipamentos Retiramos Schema *************** */
+const equipamentosRetiradosSchema = new Schema({
+  modelo_equipamento  : { type: String, default: '' },
+  numero_equipamento  : { type: String, default: '' },
+  itens: {
+    type: [{
+      descricao       : { type: String, default: '' },
+      quantidade      : { type: Number, default: '' },
+    }],
+    default: [],
+  }
+}, { _id : false })
 
-//***************** Interacao Tecnico Schema end *********** */
+//***************** Equipamentos Com Troca de Peca Schema *************** */
+const equipementoComTrocaDePecaSchema = new Schema({
+  modelo_equipamento  : { type: String, default: '' },
+  numero_equipamento  : { type: String, default: '' },
+  pecas: { 
+    type: [{
+      descricao       : { type: String, default: '' },
+      quantidade      : { type: Number, default: '' },
+      preco           : { type: Number, default: '' },
+    }],
+    default: [],
+  }
+}, { _id : false })
+
+//***************** Faturamento Schema *************** */
+const faturamentoSchema = new Schema({
+  cnpj                : { type: String,   default: ''},
+  razao_social        : { type: String,   default: ''},
+  email               : { type: String,   default: ''},
+  equipamentos        : { type: [equipementoComTrocaDePecaSchema], default: []},
+}, { _id : false })
+
+//***************** Treinamento Schema *************** */
+const treinametoSchema = new Schema({
+  topicos             : { type: [String], default: []},
+  software            : { type: String,   default: ''},
+  caminho_rede        : { type: String,   default: ''},
+}, { _id : false })
+
+//*****************  Relatorio Schema *************** */
+const relatorioSchema = new Schema({
+  motivo_retorno          : { type: String, default: '' },
+  resumo_atendimento      : { type: String, default: '' },
+  treinamento             : { type: treinametoSchema, default: ''},
+  equipamentos_retirados  : { type: [equipamentosRetiradosSchema], default: []},
+  faturamento             : { type: faturamentoSchema, default: []},
+}, { _id : false })
 
 
 //***************** Cliente Schema ************************* */
@@ -82,7 +103,6 @@ const assinaturaSchema = new Schema({
 //***************** assinatura Schema end ********************* */
 
 
-
 //***************** Atendimento Schema ********************* */
 const atendimentoSchema = new Schema({
     assinatura         : { type: assinaturaSchema },
@@ -102,7 +122,8 @@ const atendimentoSchema = new Schema({
     garantia           : { type: String, default: '' },
     observacao         : { type: String, default: '' },
     estado             : { type: String, enum: ["agendado", "cancelado", "associado"], default: "agendado" },
-    interacao_tecnico  : { type: interacaoTecnicoSChema, required: [true, "Entre com os dados do tecnico!"], default: {} },
+    interacao_tecnico  : { type: Object, required: [false, "Entre com os dados do tecnico!"], default: {} }, //needs to be removed
+    relatorio          : { type: relatorioSchema, default: null },
     tecnico            : { 
       _id:                    { type: Schema.Types.ObjectId },
       nome:                   { type: String, default: null } 
@@ -112,14 +133,11 @@ const atendimentoSchema = new Schema({
       valor:                 { type: Number, default: '' }}], 
       default: [] 
     },
-    motivos            : { type: [{ 
-      estado:                 { type: String, enum: ["cancelado", "reagendado", "encaixe"], required: [true, "Entre com o estado do motivo!"] }, 
-      motivo:                 { type: String, required: [true, "Entre com o motivo!"]}}],
-      default: [] 
-    },
-    motivos            : { type: [{ 
-      estado:                 { type: String, enum: ["cancelado", "reagendado", "encaixe"], required: [true, "Entre com o estado do motivo!"] }, 
-      motivo:                 { type: String, required: [true, "Entre com o motivo!"]}}],
+    motivos: { 
+      type: [{
+        estado:                 { type: String, enum: ["cancelado", "reagendado", "encaixe"], required: [true, "Entre com o estado do motivo!"] }, 
+        motivo:                 { type: String, required: [true, "Entre com o motivo!"]}}
+      ],
       default: [] 
     },
   },
@@ -127,8 +145,6 @@ const atendimentoSchema = new Schema({
 );
 
 //***************** Atendimento Schema end ***************** */
-
-
 atendimentoSchema.plugin(timestamps);
 atendimentoSchema.plugin(userAudit);
 
