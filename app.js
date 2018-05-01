@@ -5,10 +5,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const jwt = require('express-jwt');
-const authConfig = require('./config/authConfig')();
-
-
+const { bypass, host, port } = require('./config/authConfig')();
+const authorizationMiddleware = require('photon-authorization-middleware');
 
 const db = require("./databaseConnection");
 
@@ -18,29 +16,10 @@ const atendimentoRoute = require('./routes/atendimentoRoute');
 const app = express();
 
 app.use(cors());
-app.use("/api", 
-  jwt({
-    secret: authConfig.secret,
-    credentialsRequired: !authConfig.bypass
-  }), 
-  (err, req, res, next) => {
-    if (err.name === 'UnauthorizedError') { 
-      return(res.status(401).send('Invalid authorization token'));
-    }
-  }
-);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use("/api", (req, res, next) => {
-
-  req.body.createdBy = (req.user && req.user._doc.login.username) ? req.user._doc.login.username : 'Ambiente de Test';
-  req.body.updatedBy = (req.user && req.user._doc.login.username) ? req.user._doc.login.username : 'Ambiente de Test';
-  req.login = (req.user && req.user._doc.login) ? req.user._doc.login : {};
-   next();
-})
-
+app.use("/api", authorizationMiddleware(bypass, host, port));
 
 // view engine setup
 app.set('view engine', 'jade');

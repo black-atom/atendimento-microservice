@@ -3,6 +3,7 @@ const atendimentoController = require('../controllers/atendimentoController');
 const uploadController = require('../controllers/uploadController');
 const express = require('express');
 const rolesMiddleware = require('../middleware/roleMiddleware');
+const employeeRateController = require('../controllers/employeeRateController');
 
 route.get('/atendimentos', rolesMiddleware(['all']), atendimentoController.getAll);
 route.patch('/atendimentos', rolesMiddleware(['all']), atendimentoController.patchAtendimentos);
@@ -12,6 +13,8 @@ route.put('/atendimentos/:id', rolesMiddleware(['all']), atendimentoController.u
 route.get('/funcionariosatendimentos/', rolesMiddleware(['all']), atendimentoController.getTodosAtendimentosDosEmpregados);
 route.post('/atendimentos/:id/imagens', rolesMiddleware(['all']), uploadController.uploadingHandler, uploadController.atendimentoUpload);
 route.post('/atendimentos/:id/assinaturas', rolesMiddleware(['all']), uploadController.assinaturaUpload);
+route.get('/avaliacoes', rolesMiddleware(['all']), employeeRateController.calcEmployeeRates);
+
 
 //route.put('/atendimentos/funcionario/:id', atendimentoController.getUPFromUddnwind);
 
