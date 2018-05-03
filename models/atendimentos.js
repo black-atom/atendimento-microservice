@@ -121,6 +121,7 @@ const atendimentoSchema = new Schema({
     autorizado         : { type: String, default: '' },
     garantia           : { type: String, default: '' },
     observacao         : { type: String, default: '' },
+    isViewed: { type: Boolean, required: [true, 'Atendimento visualizado ou não'], default: false },
     estado             : { type: String, enum: ["agendado", "cancelado", "associado"], default: "agendado" },
     interacao_tecnico  : { type: Object, required: [false, "Entre com os dados do tecnico!"], default: {} }, //needs to be removed
     relatorio          : { type: relatorioSchema, default: null },
@@ -141,9 +142,9 @@ const atendimentoSchema = new Schema({
       default: [] 
     },
     faturamento: {
-      status:  { type: Boolean, required: [true, "Entre com o status de faturamento"], default: false },
-      faturamentoAt:  { type: Schema.Types.Date, required: [true, "Entre com a data do faturamento"], default: new Date() },
-    }
+      status: { type: Boolean, required: [true, "Entre com o status de faturamento"], default: false },
+      faturamentoAt: { type: Schema.Types.Date, required: [true, "Entre com a data do atendimento"], default: new Date() },
+    },
   },
   { versionKey: false }
 );

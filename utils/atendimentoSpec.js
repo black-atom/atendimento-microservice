@@ -31,6 +31,7 @@ const atendimentoSpec = {
   createdBy: prop('createdBy'),
   updatedBy: prop('updatedBy'),
   faturamento: prop('faturamento'),
+  isViewed: prop('isViewed'),
   relatorio: propOr(null, ['relatorio']),
 };
 
