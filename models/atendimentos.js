@@ -140,6 +140,10 @@ const atendimentoSchema = new Schema({
       ],
       default: [] 
     },
+    faturamento: {
+      status:  { type: Boolean, required: [true, "Entre com o status de faturamento"], default: false },
+      faturamentoAt:  { type: Schema.Types.Date, required: [true, "Entre com a data do faturamento"], default: new Date() },
+    }
   },
   { versionKey: false }
 );
