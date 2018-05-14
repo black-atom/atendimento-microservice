@@ -32,12 +32,19 @@ const contatoSchema  = new Schema({
 
 //***************** Equipamentos Retiramos Schema *************** */
 const equipamentosRetiradosSchema = new Schema({
-  modelo_equipamento  : { type: String, default: '' },
+  id                  : { type: String, default: '' },
+  descricao           : { type: String, default: '' },
+  modelo              : { type: String, default: '' },
   numero_equipamento  : { type: String, default: '' },
-  itens: {
+  problema            : { type: String, default: '' },
+  testes              : { type: String, default: '' },
+  foto                : { type: String, default: '' },
+  key                 : { type: String, default: '' },
+  pecas: {
     type: [{
       descricao       : { type: String, default: '' },
       quantidade      : { type: Number, default: '' },
+      foto            : { type: String, default: '' },
     }],
     default: [],
   }
@@ -45,13 +52,20 @@ const equipamentosRetiradosSchema = new Schema({
 
 //***************** Equipamentos Com Troca de Peca Schema *************** */
 const equipementoComTrocaDePecaSchema = new Schema({
-  modelo_equipamento  : { type: String, default: '' },
+  id                  : { type: String, default: '' },
+  descricao           : { type: String, default: '' },
+  modelo              : { type: String, default: '' },
   numero_equipamento  : { type: String, default: '' },
-  pecas: { 
+  problema            : { type: String, default: '' },
+  testes              : { type: String, default: '' },
+  foto                : { type: String, default: '' },
+  key                 : { type: String, default: '' },
+  pecas: {
     type: [{
       descricao       : { type: String, default: '' },
       quantidade      : { type: Number, default: '' },
-      preco           : { type: Number, default: '' },
+      foto            : { type: String, default: '' },
+      preco           : { type: Number, default: '' }, 
     }],
     default: [],
   }
