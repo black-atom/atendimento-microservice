@@ -1,24 +1,26 @@
 const multer = require('multer');
 const crypto = require('crypto');
+const uuid = require('uuid');
 const path = require('path');
 const Atendimentos = require('../models/atendimentos');
+const MulterGoogleCloudStorage = require('multer-google-storage');
 const { prop } = require('ramda');
 const fs = require('fs');
 
-const storage = multer.diskStorage({
-  destination: 'public/imagens',
-  filename: function (req, file, cb) {
-    crypto.pseudoRandomBytes(16, function (err, raw) {
-      if (err) return cb(err)
+function getFileNameToStore(req, file, cb) {
+  console.log(file.originalname);
+	cb(null,`atendimento/images/${uuid()}_${file.originalname}`);
+}
 
-      cb(null, raw.toString('hex') + path.extname(file.originalname))
-    })
-  }
-});
-
-const uploadingHandler = multer({
-  limits: {fileSize: 1000000, files:1},
-  storage: storage,
+const atendimentoUploadHandler = multer({
+  storage: MulterGoogleCloudStorage.storageEngine({
+    keyFilename: "./credentials/google.json",
+    projectId: "blackatom-projects",
+    bucket: "blackatom-images",
+    maxRetries: 3,
+    filename: getFileNameToStore,
+    acl: 'publicRead',
+  }),
 }).single("file");
 
 const atendimentoUpload = ( req, res, next ) => {
@@ -92,5 +94,5 @@ const assinaturaUpload = ( req, res, next ) => {
 module.exports = {
     atendimentoUpload, 
     assinaturaUpload,
-    uploadingHandler
+    atendimentoUploadHandler
 }
