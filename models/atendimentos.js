@@ -10,7 +10,7 @@ const enderecoSchema  = new Schema({
     numero            : { type: String, required: [true, "Entre com o numero"] },
     cep               : { type: String, required: [true, "Entre com o cep"] },
     bairro            : { type: String, required: [true, "Entre com o bairro"] },
-    cidade            : { type: String, required: [true, "Entre com a cidade"] },
+    cidade            : { type: String, required: [true, "Entrecliente            : { type: clienteSchema, required: [true, "Entre com os dados de contato"] }, com a cidade"] },
     uf                : { type: String, required: [true, "Entre com os dados do estado"] },
     ponto_referencia  : { type: String, default: '' },
     complemento       : { type: String, default: '' },
@@ -76,6 +76,7 @@ const faturamentoSchema = new Schema({
   cnpj                : { type: String,   default: ''},
   razao_social        : { type: String,   default: ''},
   email               : { type: String,   default: ''},
+  prazo               : { type: String,   default: ''},
   equipamentos        : { type: [equipementoComTrocaDePecaSchema], default: []},
 }, { _id : false })
 
@@ -135,6 +136,7 @@ const atendimentoSchema = new Schema({
     autorizado         : { type: String, default: '' },
     garantia           : { type: String, default: '' },
     observacao         : { type: String, default: '' },
+    isChecked_stock: { type: Boolean, required: [true, 'Atendimento conferido pelo estoque'], default: false },
     isViewed: { type: Boolean, required: [true, 'Atendimento visualizado ou não'], default: false },
     estado             : { type: String, enum: ["agendado", "cancelado", "associado"], default: "agendado" },
     interacao_tecnico  : { type: Object, required: [false, "Entre com os dados do tecnico!"], default: {} }, //needs to be removed
