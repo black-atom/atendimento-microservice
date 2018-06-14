@@ -118,6 +118,7 @@ const assinaturaSchema = new Schema({
 
 const liberacaoSupervisorSchema = new Schema({
   nome_supervisor: { type: String, default: '', required: [true, "Entre com os dados do supervisor"] },
+  _id : { type: Schema.Types.ObjectId },
 });
 
 //***************** Atendimento Schema ********************* */

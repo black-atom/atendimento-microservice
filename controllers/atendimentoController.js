@@ -15,6 +15,21 @@ const getAll = async(req, res, next) => {
   delete query.skip;
   delete query.limit;
 
+  const result = {
+    data_atendimento: 1,
+    "cliente.cnpj_cpf": 1,
+    "cliente.nome_razao_social": 1,
+    "endereco.bairro": 1,
+    "endereco.cidade": 1,
+    "tecnico.nome": 1,
+    tipo: 1,
+    _id: 1,
+    estado: 1,
+    createdBy: 1,
+    motivos: 1,
+    liberacao: 1,
+  }
+
   for (key in query) {
     let valor = query[key];
     if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null) {
@@ -26,7 +41,7 @@ const getAll = async(req, res, next) => {
   }
 
   try {
-    const atendimentos = await Atendimentos.find(query).skip(skip).limit(limit).sort( { data_atendimento: -1 } )
+    const atendimentos = await Atendimentos.find(query, result).skip(skip).limit(limit).sort( { data_atendimento: -1 } )
     const count = await Atendimentos.find(query).count()
     res.json({ atendimentos, count });
   } catch (error) {
@@ -152,7 +167,9 @@ const getLastAtendimentos = (req, res, next) => {
     Atendimentos.find({ 
       "cliente.cnpj_cpf": cnpj_cpf, 
       data_atendimento: { $gte: lastDays, $lte: today.toString() }
-    });
+    })
+    .sort({ data_atendimento: -1 });
+    
 
   const sendAtendimentos = atendimentos => res.json(atendimentos)
 
