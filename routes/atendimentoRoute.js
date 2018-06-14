@@ -6,6 +6,7 @@ const rolesMiddleware = require('../middleware/roleMiddleware');
 const employeeRateController = require('../controllers/employeeRateController');
 
 route.get('/atendimentos', rolesMiddleware(['all']), atendimentoController.getAll);
+route.get('/atendimentos/latest', rolesMiddleware(['all']), atendimentoController.getLastAtendimentos);
 route.patch('/atendimentos', rolesMiddleware(['all']), atendimentoController.patchAtendimentos);
 route.get('/atendimentos/:id', rolesMiddleware(['all']), atendimentoController.getAtendimentoByID);
 route.post('/atendimentos', rolesMiddleware(['all']), atendimentoController.atendimentoNew);

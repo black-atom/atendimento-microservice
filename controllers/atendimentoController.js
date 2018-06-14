@@ -4,6 +4,7 @@ const multer = require('multer');
 const Promise = require('bluebird');
 const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');
+const moment = require('moment');
 
 const getAll = async(req, res, next) => {
 
@@ -141,11 +142,33 @@ const getAtendimentosPorData = data => {
     );
 };
 
+const getLastAtendimentos = (req, res, next) => {
+
+  const { cnpj_cpf, days } = req.query;
+  const today = new Date();
+  const lastDays = moment().subtract(parseInt(days), 'days').startOf('day');
+
+  const findAtendimentos = cnpj_cpf => 
+    Atendimentos.find({ 
+      "cliente.cnpj_cpf": cnpj_cpf, 
+      data_atendimento: { $gte: lastDays, $lte: today.toString() }
+    });
+
+  const sendAtendimentos = atendimentos => res.json(atendimentos)
+
+  Promise.resolve(cnpj_cpf)
+    .then(findAtendimentos)
+    .then(sendAtendimentos)
+    .catch(error => next(error));
+
+}
+
 module.exports = {
   getAll,
   patchAtendimentos,
   atendimentoNew,
   updateAtendimento,
   getAtendimentoByID,
-  getTodosAtendimentosDosEmpregados
+  getTodosAtendimentosDosEmpregados,
+  getLastAtendimentos,
 };

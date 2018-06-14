@@ -10,7 +10,7 @@ const enderecoSchema  = new Schema({
     numero            : { type: String, required: [true, "Entre com o numero"] },
     cep               : { type: String, required: [true, "Entre com o cep"] },
     bairro            : { type: String, required: [true, "Entre com o bairro"] },
-    cidade            : { type: String, required: [true, "Entrecliente            : { type: clienteSchema, required: [true, "Entre com os dados de contato"] }, com a cidade"] },
+    cidade            : { type: String, required: [true, "Entre com os dados da cidade"] },
     uf                : { type: String, required: [true, "Entre com os dados do estado"] },
     ponto_referencia  : { type: String, default: '' },
     complemento       : { type: String, default: '' },
@@ -64,7 +64,6 @@ const equipementoComTrocaDePecaSchema = new Schema({
     type: [{
       descricao       : { type: String, default: '' },
       quantidade      : { type: Number, default: '' },
-      foto            : { type: String, default: '' },
       preco           : { type: Number, default: '' }, 
     }],
     default: [],
@@ -117,9 +116,13 @@ const assinaturaSchema = new Schema({
 })
 //***************** assinatura Schema end ********************* */
 
+const liberacaoSupervisorSchema = new Schema({
+  nome_supervisor: { type: String, default: '', required: [true, "Entre com os dados do supervisor"] },
+});
 
 //***************** Atendimento Schema ********************* */
 const atendimentoSchema = new Schema({
+    liberacao          : { type: liberacaoSupervisorSchema, default: null  },
     assinatura         : { type: assinaturaSchema },
     cliente            : { type: clienteSchema, required: [true, "Entre com os dados de contato"] },
     endereco           : { type: enderecoSchema, required: [true, "Entre com os dados do endereco"] },
@@ -138,7 +141,7 @@ const atendimentoSchema = new Schema({
     observacao         : { type: String, default: '' },
     isChecked_stock: { type: Boolean, required: [true, 'Atendimento conferido pelo estoque'], default: false },
     isViewed: { type: Boolean, required: [true, 'Atendimento visualizado ou não'], default: false },
-    estado             : { type: String, enum: ["agendado", "cancelado", "associado"], default: "agendado" },
+    estado             : { type: String, enum: ["agendado", "cancelado", "associado", "bloqueado"], default: "agendado" },
     interacao_tecnico  : { type: Object, required: [false, "Entre com os dados do tecnico!"], default: {} }, //needs to be removed
     relatorio          : { type: relatorioSchema, default: null },
     tecnico            : { 

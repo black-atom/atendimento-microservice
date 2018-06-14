@@ -34,6 +34,7 @@ const atendimentoSpec = {
   isChecked_stock: prop('isChecked_stock'),
   isViewed: prop('isViewed'),
   relatorio: propOr(null, ['relatorio']),
+  liberacao: prop('liberacao'),
 };
 
 const clienteSpec = {
