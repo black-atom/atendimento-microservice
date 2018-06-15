@@ -27,6 +27,7 @@ const getAll = async(req, res, next) => {
     createdBy: 1,
     motivos: 1,
     liberacao: 1,
+    imagens: 1,
   }
 
   for (key in query) {
