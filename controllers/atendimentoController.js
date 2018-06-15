@@ -20,7 +20,7 @@ const getAll = async(req, res, next) => {
     "cliente.cnpj_cpf": 1,
     "cliente.nome_razao_social": 1,
     "endereco": 1,
-    "tecnico.nome": 1,
+    "tecnico": 1,
     tipo: 1,
     _id: 1,
     estado: 1,
