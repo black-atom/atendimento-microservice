@@ -11,6 +11,7 @@ route.patch('/atendimentos', rolesMiddleware(['all']), atendimentoController.pat
 route.get('/atendimentos/:id', rolesMiddleware(['all']), atendimentoController.getAtendimentoByID);
 route.post('/atendimentos', rolesMiddleware(['all']), atendimentoController.atendimentoNew);
 route.put('/atendimentos/:id', rolesMiddleware(['all']), atendimentoController.updateAtendimento);
+route.put('/atendimentos-checked/:id', rolesMiddleware(['tecnica', 'administrador']), atendimentoController.updateAtendimento);
 route.get('/funcionariosatendimentos/', rolesMiddleware(['all']), atendimentoController.getTodosAtendimentosDosEmpregados);
 route.post('/atendimentos/:id/imagens', rolesMiddleware(['all']), uploadController.uploadingHandler, uploadController.atendimentoUpload);
 route.post('/atendimentos/:id/assinaturas', rolesMiddleware(['all']), uploadController.assinaturaUpload);
