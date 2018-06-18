@@ -30,8 +30,13 @@ const atendimentoSpec = {
   motivos: prop('motivos'),
   createdBy: prop('createdBy'),
   updatedBy: prop('updatedBy'),
+  faturamento: prop('faturamento'),
+  isChecked_stock: prop('isChecked_stock'),
+  isViewed: prop('isViewed'),
   relatorio: propOr(null, ['relatorio']),
+  liberacao: prop('liberacao'),
 };
+
 const clienteSpec = {
   cnpj_cpf: removeMaskProp('cnpj_cpf'),
   inscricao_estadual: removeMaskProp('inscricao_estadual'),

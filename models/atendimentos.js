@@ -10,7 +10,7 @@ const enderecoSchema  = new Schema({
     numero            : { type: String, required: [true, "Entre com o numero"] },
     cep               : { type: String, required: [true, "Entre com o cep"] },
     bairro            : { type: String, required: [true, "Entre com o bairro"] },
-    cidade            : { type: String, required: [true, "Entre com a cidade"] },
+    cidade            : { type: String, required: [true, "Entre com os dados da cidade"] },
     uf                : { type: String, required: [true, "Entre com os dados do estado"] },
     ponto_referencia  : { type: String, default: '' },
     complemento       : { type: String, default: '' },
@@ -32,12 +32,19 @@ const contatoSchema  = new Schema({
 
 //***************** Equipamentos Retiramos Schema *************** */
 const equipamentosRetiradosSchema = new Schema({
-  modelo_equipamento  : { type: String, default: '' },
+  id                  : { type: String, default: '' },
+  descricao           : { type: String, default: '' },
+  modelo              : { type: String, default: '' },
   numero_equipamento  : { type: String, default: '' },
-  itens: {
+  problema            : { type: String, default: '' },
+  testes              : { type: String, default: '' },
+  foto                : { type: String, default: '' },
+  key                 : { type: String, default: '' },
+  pecas: {
     type: [{
       descricao       : { type: String, default: '' },
       quantidade      : { type: Number, default: '' },
+      foto            : { type: String, default: '' },
     }],
     default: [],
   }
@@ -45,13 +52,19 @@ const equipamentosRetiradosSchema = new Schema({
 
 //***************** Equipamentos Com Troca de Peca Schema *************** */
 const equipementoComTrocaDePecaSchema = new Schema({
-  modelo_equipamento  : { type: String, default: '' },
+  id                  : { type: String, default: '' },
+  descricao           : { type: String, default: '' },
+  modelo              : { type: String, default: '' },
   numero_equipamento  : { type: String, default: '' },
-  pecas: { 
+  problema            : { type: String, default: '' },
+  testes              : { type: String, default: '' },
+  foto                : { type: String, default: '' },
+  key                 : { type: String, default: '' },
+  pecas: {
     type: [{
       descricao       : { type: String, default: '' },
       quantidade      : { type: Number, default: '' },
-      preco           : { type: Number, default: '' },
+      preco           : { type: Number, default: '' }, 
     }],
     default: [],
   }
@@ -62,6 +75,7 @@ const faturamentoSchema = new Schema({
   cnpj                : { type: String,   default: ''},
   razao_social        : { type: String,   default: ''},
   email               : { type: String,   default: ''},
+  prazo               : { type: String,   default: ''},
   equipamentos        : { type: [equipementoComTrocaDePecaSchema], default: []},
 }, { _id : false })
 
@@ -102,9 +116,14 @@ const assinaturaSchema = new Schema({
 })
 //***************** assinatura Schema end ********************* */
 
+const liberacaoSupervisorSchema = new Schema({
+  nome_supervisor: { type: String, default: '', required: [true, "Entre com os dados do supervisor"] },
+  _id : { type: Schema.Types.ObjectId },
+});
 
 //***************** Atendimento Schema ********************* */
 const atendimentoSchema = new Schema({
+    liberacao          : { type: liberacaoSupervisorSchema, default: null  },
     assinatura         : { type: assinaturaSchema },
     cliente            : { type: clienteSchema, required: [true, "Entre com os dados de contato"] },
     endereco           : { type: enderecoSchema, required: [true, "Entre com os dados do endereco"] },
@@ -121,7 +140,9 @@ const atendimentoSchema = new Schema({
     autorizado         : { type: String, default: '' },
     garantia           : { type: String, default: '' },
     observacao         : { type: String, default: '' },
-    estado             : { type: String, enum: ["agendado", "cancelado", "associado"], default: "agendado" },
+    isChecked_stock: { type: Boolean, required: [true, 'Atendimento conferido pelo estoque'], default: false },
+    isViewed: { type: Boolean, required: [true, 'Atendimento visualizado ou não'], default: false },
+    estado             : { type: String, enum: ["agendado", "cancelado", "associado", "bloqueado"], default: "agendado" },
     interacao_tecnico  : { type: Object, required: [false, "Entre com os dados do tecnico!"], default: {} }, //needs to be removed
     relatorio          : { type: relatorioSchema, default: null },
     tecnico            : { 
@@ -139,6 +160,10 @@ const atendimentoSchema = new Schema({
         motivo:                 { type: String, required: [true, "Entre com o motivo!"]}}
       ],
       default: [] 
+    },
+    faturamento: {
+      status: { type: Boolean, required: [true, "Entre com o status de faturamento"], default: false },
+      faturamentoAt: { type: Schema.Types.Date, required: [true, "Entre com a data do atendimento"], default: new Date() },
     },
   },
   { versionKey: false }
