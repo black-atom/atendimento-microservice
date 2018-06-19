@@ -7,13 +7,14 @@ const formatAtendimento = require('../utils/atendimentoSpec');
 const moment = require('moment');
 
 const getAll = async(req, res, next) => {
-
   const limit = parseInt(req.query.limit);
-  const skip = parseInt(req.query.skip);
-  
+  const skip = parseInt(req.query.skip); 
+  const isReqFromApp = req.query.app
+
   let query = { ...req.query };
   delete query.skip;
   delete query.limit;
+  delete query.app;
 
   const result = {
     data_atendimento: 1,
@@ -42,9 +43,13 @@ const getAll = async(req, res, next) => {
   }
 
   try {
-    const atendimentos = await Atendimentos.find(query, result).skip(skip).limit(limit).sort( { data_atendimento: -1 } )
     const count = await Atendimentos.find(query).count()
-    res.json({ atendimentos, count });
+   if(isReqFromApp) {
+    const atendimentos = await Atendimentos.find(query).skip(skip).limit(limit).sort( { data_atendimento: -1 } )
+    return res.json({ atendimentos, count });
+   }
+    const atendimentos = await Atendimentos.find(query, result).skip(skip).limit(limit).sort( { data_atendimento: -1 } )
+    return res.json({ atendimentos, count });
   } catch (error) {
       next(error)
   }
