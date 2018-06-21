@@ -5,6 +5,10 @@ const Promise = require('bluebird');
 const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');
 const moment = require('moment');
+const googleMapsClient = require('@google/maps')
+const { key } = require('../utils/api-key-google');
+
+const googleMaps = googleMapsClient.createClient({ key, Promise: Promise });
 
 const getAll = async(req, res, next) => {
   const limit = parseInt(req.query.limit);
@@ -57,12 +61,18 @@ const getAll = async(req, res, next) => {
 
 const atendimentoNew = (req, res, next) => {
   const atendimento = formatAtendimento(req.body);
-  const atendimentoModel = new Atendimentos(atendimento);
-
-  atendimentoModel
-    .save()
-    .then(savedAtendimento => res.json(savedAtendimento))
-    .catch(error => next(error));
+  const { rua, bairro, cidade, uf } = atendimento;
+  const address = `${rua}, ${bairro}, ${cidade} - ${uf}`
+  googleMaps
+    .geocode({ address })
+    .asPromise()
+    .then(({ json: { results: { location } } }) => { 
+      const atendimentoLogLat = {...atendimento, location }; 
+      const atendimentoModel = new Atendimentos(atendimentoLogLat);
+      atendimentoModel
+        .save()
+        .then(savedAtendimento => res.json(savedAtendimento))
+  }).catch(error => next(error));
 };
 
 const updateAtendimento = (req, res, next) => {
