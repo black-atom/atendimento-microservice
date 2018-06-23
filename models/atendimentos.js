@@ -14,14 +14,6 @@ const enderecoSchema  = new Schema({
     uf                : { type: String, required: [true, "Entre com os dados do estado"] },
     ponto_referencia  : { type: String, default: '' },
     complemento       : { type: String, default: '' },
-    location          : { type: {
-      type: String,
-      default: 'Point',
-      required: true,
-    }, coordinates: {
-      type: [Number],
-      defaul: [],
-    }},
 })
 
 //***************** Endereco Schema end ******************** */
@@ -123,6 +115,11 @@ const assinaturaSchema = new Schema({
   url                   : { type: String, default: '' },
 })
 //***************** assinatura Schema end ********************* */
+
+const locationSchema = new Schema({
+  type              : { type: String, default: 'Point', required: true },
+  coordinates       : { type: [Number], required: true, defaul: [] },
+}, { _id: false })
 
 const liberacaoSupervisorSchema = new Schema({
   nome_supervisor: { type: String, default: '', required: [true, "Entre com os dados do supervisor"] },
@@ -277,6 +274,10 @@ const atendimentoSchema = new Schema({
   valor: {
     type: Number,
     default: ''
+  },
+  location: {
+    type: locationSchema,
+    required: true,
   }
 },
   { versionKey: false }
@@ -285,7 +286,7 @@ const atendimentoSchema = new Schema({
 //***************** Atendimento Schema end ***************** */
 atendimentoSchema.plugin(timestamps);
 atendimentoSchema.plugin(userAudit);
-atendimentoSchema.index({ loc: '2dsphere' });
+atendimentoSchema.index({ location: '2dsphere' });
 
 
 module.exports = dbConnection.model("atendimentos", atendimentoSchema);
