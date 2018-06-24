@@ -7,6 +7,16 @@ const formatAtendimento = require('../utils/atendimentoSpec');
 const moment = require('moment');
 const { location } = require('./utils')
 
+const populateLocation = (atendimento) => {
+  return location(atendimento.endereco)
+    .then(coordinates => ({
+      ...atendimento,
+      location: {
+        coordinates,
+      }
+    }));
+};
+
 const getAll = async(req, res, next) => {
   const limit = parseInt(req.query.limit);
   const skip = parseInt(req.query.skip); 
@@ -58,15 +68,6 @@ const getAll = async(req, res, next) => {
 
 const atendimentoNew = (req, res, next) => {
   const getAtendimento = () => formatAtendimento(req.body);
-  const populateLocation = (atendimento) => {
-    return location(atendimento.endereco)
-      .then(coordinates => ({
-        ...atendimento,
-        location: {
-          coordinates,
-        }
-      }));
-  };
   const createInstance = atendimento => new Atendimentos(atendimento);
   const saveInstance = atendimentoInstance => atendimentoInstance.save()
   const respondWithAtendimento = savedAtendimento => res.json(savedAtendimento);
@@ -83,15 +84,36 @@ const atendimentoNew = (req, res, next) => {
 };
 
 const updateAtendimento = (req, res, next) => {
-  const atendimento = formatAtendimento(req.body);
-  const _id = prop('id', req.params);
+  const id = prop('id', req.params)
+  const findAtendimentoById = id => Atendimentos.findById(id)
+  const getAtendimentoFromReq = formatAtendimento(req.body)
+  const updateLocation = atendimentoFromDB => {
+  const atendimentoReq = formatAtendimento(req.body)
 
-  Atendimentos
-    .findByIdAndUpdate(_id, atendimento, {
+    if(
+      atendimentoFromDB.endereco.cep !== atendimentoReq.endereco.cep
+      || atendimentoFromDB.endereco.rua !== atendimentoReq.endereco.rua
+      || !atendimentoFromDB.location
+    ) {
+      return populateLocation(atendimentoReq)
+    }
+
+    return atendimentoReq
+  }
+  const updateAtendimento = atendimento => Atendimentos
+    .findByIdAndUpdate(id, atendimento, {
       runValidators: true,
       new: true,
     })
-    .then(updatedData => res.json(updatedData))
+  const respondWithAtendimento = savedAtendimento => res.json(savedAtendimento);
+
+  return Promise
+    .resolve()
+    .then(() => id)
+    .then(findAtendimentoById)
+    .then(updateLocation)
+    .then(updateAtendimento)
+    .then(respondWithAtendimento)
     .catch(error => next(error));
 };
 
