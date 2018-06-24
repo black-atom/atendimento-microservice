@@ -26,6 +26,7 @@
     "multer-google-storage": "https://github.com/vitorsilvalima/multer-google-storage",
     "photon-authorization-middleware": "^1.0.2",
     "ramda": "^0.24.1",
+    "rxjs": "^6.2.1",
     "serve-favicon": "~2.4.2",
     "socket.io": "^2.0.3",
     "uuid": "^3.2.1"

@@ -77,7 +77,6 @@ const atendimentoNew = (req, res, next) => {
     .then(getAtendimento)
     .then(populateLocation)
     .then(createInstance)
-    .then(createInstance)
     .then(saveInstance)
     .then(respondWithAtendimento)
     .catch(error => next(error));
