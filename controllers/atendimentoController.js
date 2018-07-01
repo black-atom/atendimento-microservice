@@ -32,13 +32,25 @@ const getAll = async(req, res, next) => {
     imagens: 1,
   }
 
+  const parseDate = propName => queryObj => {
+    const momentDate = moment(new Date(query[propName]))
+    return ({
+      $gte: momentDate.startOf('day').toISOString(),
+      $lte: momentDate.endOf('day').toISOString()
+    })
+  }
+
   for (key in query) {
     let valor = query[key];
-    if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null) {
+
+    if (key.indexOf('data') > -1) {
+      valor = parseDate(key)(query)
+    } else if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null) {
       valor = new RegExp("" + valor + "", "i");
     } else if (query[key] === "null") {
       valor = null;
     }
+
     query = { ...query, [key]: valor };
   }
 
