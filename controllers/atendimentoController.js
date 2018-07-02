@@ -42,7 +42,10 @@ const getAll = async(req, res, next) => {
     "relatorio.faturamento.equipamentos": 1,
     imagens: 1,
     location: 1,
-    
+    observacao: 1,
+    descricao: 1,
+    modelo_equipamento: 1,
+    numero_equipamento: 1,        
   }
 
   for (key in query) {
@@ -226,7 +229,17 @@ const getLastAtendimentos = (req, res, next) => {
 
 }
 
+const associarAtendimento = async (req, res, next) => {
+  const _id = prop('id', req.params);
+  const tecnico = prop('body', req.body);
+
+  const atendimentoFound = await Atendimentos.findById(_id);
+  const atendimentoAssociado = { ...atendimentoFound, tecnico };
+  return atendimentoAssociado.save().then(atendimento => res.json(atendimento));
+}
+
 module.exports = {
+  associarAtendimento,
   getAll,
   patchAtendimentos,
   atendimentoNew,
