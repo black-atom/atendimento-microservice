@@ -41,6 +41,8 @@ const getAll = async(req, res, next) => {
     liberacao: 1,
     "relatorio.faturamento.equipamentos": 1,
     imagens: 1,
+    location: 1,
+    
   }
 
   for (key in query) {
