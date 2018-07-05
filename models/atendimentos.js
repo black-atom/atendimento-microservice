@@ -277,7 +277,6 @@ const atendimentoSchema = new Schema({
   },
   location: {
     type: locationSchema,
-    required: true,
   }
 },
   { versionKey: false }

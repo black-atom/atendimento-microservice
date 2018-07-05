@@ -2,13 +2,13 @@ const { getConfig } = require('./utils');
 
 const config = {
   development: {
-    apiKey: process.env.GOOGLE_MAPS_API_KEY || null,
+    apiKey: 'replace',
   },
   test: {
-    apiKey: process.env.GOOGLE_MAPS_API_KEY|| null,
+    apiKey: 'replace',
   },
   production: {
-    apiKey: process.env.GOOGLE_MAPS_API_KEY || null,
+    apiKey: 'replace',
   }
 };
 

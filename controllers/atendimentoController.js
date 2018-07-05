@@ -229,14 +229,22 @@ const getLastAtendimentos = (req, res, next) => {
 
 }
 
-const associarAtendimento = async (req, res, next) => {
-  const _id = prop('id', req.params);
-  const tecnico = prop('body', req.body);
+const associarAtendimento = (req, res, next) => {
+  const tecnico = req.body.tecnico;
+  const id = req.params.id;
 
-  const atendimentoFound = await Atendimentos.findById(_id);
-  const atendimentoAssociado = { ...atendimentoFound, tecnico };
-  return atendimentoAssociado.save().then(atendimento => res.json(atendimento));
+  const findAtendimento = id => Atendimentos.findById(id);
+  Promise.resolve(id)
+    .then(findAtendimento)
+    .then(atendimento => {
+      atendimento.tecnico = tecnico;
+      atendimento.estado = 'associado'
+      return atendimento.save({ new: true });
+    })
+    .then(atendimento => res.json(atendimento))
+
 }
+
 
 module.exports = {
   associarAtendimento,

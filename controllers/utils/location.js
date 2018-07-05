@@ -14,13 +14,7 @@ const googleResToCoordinates = pipe(
 )
 
 const getLocationFromEndereco = ({ rua, cidade, uf, cep, numero }) => {
-  return mapsClient.geocode({ components: {
-    route: `${rua} ${numero}`,
-    postal_code: cep,
-    city: cidade,
-    country: 'Brasil',
-    language: 'pt'
-  }})
+  return mapsClient.geocode({ address: `${rua}, ${cidade}` })
     .asPromise()
     .then(googleResToCoordinates)
 }
