@@ -34,7 +34,7 @@ const getAll = async(req, res, next) => {
 
   for (key in query) {
     let valor = query[key];
-    if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null) {
+    if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null && key.indexOf('id') < 0) {
       valor = new RegExp("" + valor + "", "i");
     } else if (query[key] === "null") {
       valor = null;
