@@ -1,9 +1,20 @@
 const { from } = require('rxjs');
-const { tap, flatMap, delay, zip } = require('rxjs/operators');
+const { tap, flatMap, map, zip } = require('rxjs/operators');
 const { atendimentos } = require('../../models');
 const moment = require('moment');
+const { location } = require('../../controllers/utils')
+const data = moment('20180709')
 
-const data = moment('20180622')
+const populateLocation = (atendimento) => {
+  return location(atendimento.endereco)
+    .then(coordinates => ({
+      ...atendimento,
+      location: {
+        coordinates,
+      }
+    }));
+};
+
 console.log(data.toDate())
 from(atendimentos.find({
   data_atendimento: {
@@ -12,6 +23,16 @@ from(atendimentos.find({
 }))
   .pipe(
     tap(data => console.log(`${data.length} documents will be migrated`)),
-    flatMap(data => data),
+    flatMap(atendimentos => atendimentos),
+    flatMap(atendimento => {
+      return location(atendimento.endereco)
+        .then(coordinates => {
+          atendimento.location ={
+            coordinates,
+          }
+
+          return atendimento.save()
+        })
+    })
   )
-  .subscribe(data => console.log(data._id))
+  .subscribe(atendimento => console.log(atendimento._id))
