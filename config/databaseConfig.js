@@ -1,4 +1,4 @@
-const getConfig = require('./index');
+const { getConfig } = require('./utils');
 
 const config = getConfig({
     development: {

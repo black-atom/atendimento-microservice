@@ -21,11 +21,11 @@ const enderecoSchema  = new Schema({
 
 //***************** Contato Schema ************************* */
 const contatoSchema  = new Schema({
-    email             : { type: String, default: '' },
-    celular           : { type: String, default: '' },
-    nome              : { type: String },
-    observacao        : { type: String, default: '' },
-    telefone          : { type: String, required: [true, "Entre com o telefone de contato!"] },
+  email             : { type: String, default: '' },
+  celular           : { type: String, default: '' },
+  nome              : { type: String },
+  observacao        : { type: String, default: '' },
+  telefone          : { type: String, required: [true, "Entre com o telefone de contato!"] },
 })
 
 
@@ -116,6 +116,11 @@ const assinaturaSchema = new Schema({
 })
 //***************** assinatura Schema end ********************* */
 
+const locationSchema = new Schema({
+  type              : { type: String, default: 'Point', required: true },
+  coordinates       : { type: [Number], required: true, defaul: [] },
+}, { _id: false })
+
 const liberacaoSupervisorSchema = new Schema({
   nome_supervisor: { type: String, default: '', required: [true, "Entre com os dados do supervisor"] },
   _id : { type: Schema.Types.ObjectId },
@@ -123,55 +128,164 @@ const liberacaoSupervisorSchema = new Schema({
 
 //***************** Atendimento Schema ********************* */
 const atendimentoSchema = new Schema({
-    liberacao          : { type: liberacaoSupervisorSchema, default: null  },
-    assinatura         : { type: assinaturaSchema },
-    cliente            : { type: clienteSchema, required: [true, "Entre com os dados de contato"] },
-    endereco           : { type: enderecoSchema, required: [true, "Entre com os dados do endereco"] },
-    imagens            : { type: [{ tipo: String, url: String }], default: [] },
-    contato            : { type: contatoSchema, required: [true, "Entre com os dados de contato"] },
-    data_atendimento   : { type: Schema.Types.Date, required: [true, "Entre com a data do atendimento"], default: new Date() },
-    descricao          : { type: String, default: '' },
-    testes_efetuados   : { type: String, required: [true, "Entre com os testes efetuados"], default: '' },
-    modelo_equipamento : { type: String, required: [true, "Entre com o modelo do equipamento"], default: '' },
-    numero_equipamento : { type: String, default: '' },
-    estacionamento     : { type: String, required: [true, "Entre com o estacionamento"], default: '' },
-    tipo               : { type: String, default: '' },
-    valor              : { type: Number, default: '' },
-    autorizado         : { type: String, default: '' },
-    garantia           : { type: String, default: '' },
-    observacao         : { type: String, default: '' },
-    isChecked_stock: { type: Boolean, required: [true, 'Atendimento conferido pelo estoque'], default: false },
-    isViewed: { type: Boolean, required: [true, 'Atendimento visualizado ou não'], default: false },
-    estado             : { type: String, enum: ["agendado", "cancelado", "associado", "bloqueado"], default: "agendado" },
-    interacao_tecnico  : { type: Object, required: [false, "Entre com os dados do tecnico!"], default: {} }, //needs to be removed
-    relatorio          : { type: relatorioSchema, default: null },
-    tecnico            : { 
-      _id:                    { type: Schema.Types.ObjectId },
-      nome:                   { type: String, default: null } 
-    },
-    avaliacao          : { type: [{ 
-      pergunta:              { type: String, required: true }, 
-      valor:                 { type: Number, default: '' }}], 
-      default: [] 
-    },
-    motivos: { 
-      type: [{
-        estado:                 { type: String, enum: ["cancelado", "reagendado", "encaixe"], required: [true, "Entre com o estado do motivo!"] }, 
-        motivo:                 { type: String, required: [true, "Entre com o motivo!"]}}
-      ],
-      default: [] 
-    },
-    faturamento: {
-      status: { type: Boolean, required: [true, "Entre com o status de faturamento"], default: false },
-      faturamentoAt: { type: Schema.Types.Date, required: [true, "Entre com a data do atendimento"], default: new Date() },
-    },
+  assinatura: {
+    type: assinaturaSchema
   },
+  autorizado: {
+    type: String,
+    default: ''
+  },
+  avaliacao: {
+    type: [{
+      pergunta: {
+        type: String,
+        required: true
+      },
+      valor: {
+        type: Number,
+        default: ''
+      }
+    }],
+    default: []
+  },
+  cliente: {
+    type: clienteSchema,
+    required: [true, "Entre com os dados de contato"]
+  },
+  contato: {
+    type: contatoSchema,
+    required: [true, "Entre com os dados de contato"]
+  },
+  data_atendimento: {
+    type: Schema.Types.Date,
+    required: [true, "Entre com a data do atendimento"],
+    default: new Date()
+  },
+  descricao: {
+    type: String,
+    default: ''
+  },
+  endereco: {
+    type: enderecoSchema,
+    required: [true, "Entre com os dados do endereco"]
+  },
+  estacionamento: {
+    type: String,
+    required: [true, "Entre com o estacionamento"],
+    default: ''
+  },
+  estado: {
+    type: String,
+    enum: ["agendado", "cancelado", "associado", "bloqueado"],
+    default: "agendado"
+  },
+  faturamento: {
+    status: {
+      type: Boolean,
+      required: [true, "Entre com o status de faturamento"],
+      default: false
+    },
+    faturamentoAt: {
+      type: Schema.Types.Date,
+      required: [true, "Entre com a data do atendimento"],
+      default: new Date()
+    }
+  },
+  garantia: {
+    type: String,
+    default: ''
+  },
+  imagens: {
+    type: [{
+      tipo: String,
+      url: String
+    }],
+    default: []
+  },
+  interacao_tecnico: {
+    type: Object,
+    required: [false, "Entre com os dados do tecnico!"],
+    default: {}
+  },
+  isChecked_stock: {
+    type: Boolean,
+    required: [true, 'Atendimento conferido pelo estoque'],
+    default: false
+  },
+  isViewed: {
+    type: Boolean,
+    required: [true, 'Atendimento visualizado ou não'],
+    default: false
+  },
+  liberacao: {
+    type: liberacaoSupervisorSchema,
+    default: null
+  },
+  modelo_equipamento: {
+    type: String,
+    required: [true, "Entre com o modelo do equipamento"],
+    default: ''
+  },
+  motivos: {
+    type: [{
+      estado: {
+        type: String,
+        enum: ["cancelado", "reagendado", "encaixe"],
+        required: [true, "Entre com o estado do motivo!"]
+      },
+      motivo: {
+        type: String,
+        required: [true, "Entre com o motivo!"]
+      }
+    }],
+    default: []
+  },
+  numero_equipamento: {
+    type: String,
+    default: ''
+  },
+  observacao: {
+    type: String,
+    default: ''
+  },
+  //needs to be removed
+  relatorio: {
+    type: relatorioSchema,
+    default: null
+  },
+  tecnico: {
+    _id: {
+      type: Schema.Types.ObjectId
+    },
+    nome: {
+      type: String,
+      default: null
+    }
+  },
+  testes_efetuados: {
+    type: String,
+    required: [true, "Entre com os testes efetuados"],
+    default: ''
+  },
+  tipo: {
+    type: String,
+    default: ''
+  },
+  valor: {
+    type: Number,
+    default: ''
+  },
+  location: {
+    type: locationSchema,
+  }
+},
   { versionKey: false }
 );
 
 //***************** Atendimento Schema end ***************** */
 atendimentoSchema.plugin(timestamps);
 atendimentoSchema.plugin(userAudit);
+atendimentoSchema.index({ location: '2dsphere' });
 
 
 module.exports = dbConnection.model("atendimentos", atendimentoSchema);
