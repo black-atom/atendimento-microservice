@@ -63,7 +63,7 @@ const getAll = async(req, res, next) => {
       valor = null;
     }
     
-    if (key.indexOf('data') > -1 && key !== 'cidade') {
+    if (key.indexOf('data') > -1) {
       valor = parseDate(key)(query)
     }
 
