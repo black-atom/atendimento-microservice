@@ -5,6 +5,17 @@ const Promise = require('bluebird');
 const axios = require('axios');
 const formatAtendimento = require('../utils/atendimentoSpec');
 const moment = require('moment');
+const { location } = require('./utils')
+
+const populateLocation = (atendimento) => {
+  return location(atendimento.endereco)
+    .then(coordinates => ({
+      ...atendimento,
+      location: {
+        coordinates,
+      }
+    }));
+};
 
 const getAll = async(req, res, next) => {
   const limit = parseInt(req.query.limit);
@@ -30,15 +41,32 @@ const getAll = async(req, res, next) => {
     liberacao: 1,
     "relatorio.faturamento.equipamentos": 1,
     imagens: 1,
+    location: 1,
+    observacao: 1,
+    descricao: 1,
+    modelo_equipamento: 1,
+    numero_equipamento: 1,        
+  }
+
+  const parseDate = propName => queryObj => {
+    const momentDate = moment(new Date(query[propName]))
+    return ({
+      $gte: momentDate.startOf('day').toISOString(),
+      $lte: momentDate.endOf('day').toISOString()
+    })
   }
 
   for (key in query) {
     let valor = query[key];
-    if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null) {
+
+    if (key.indexOf('data') > -1) {
+      valor = parseDate(key)(query)
+    } else if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null && key.indexOf('id') < 0) {
       valor = new RegExp("" + valor + "", "i");
     } else if (query[key] === "null") {
       valor = null;
     }
+
     query = { ...query, [key]: valor };
   }
 
@@ -56,25 +84,52 @@ const getAll = async(req, res, next) => {
 };
 
 const atendimentoNew = (req, res, next) => {
-  const atendimento = formatAtendimento(req.body);
-  const atendimentoModel = new Atendimentos(atendimento);
-
-  atendimentoModel
-    .save()
-    .then(savedAtendimento => res.json(savedAtendimento))
+  const getAtendimento = () => formatAtendimento(req.body);
+  const createInstance = atendimento => new Atendimentos(atendimento);
+  const saveInstance = atendimentoInstance => atendimentoInstance.save()
+  const respondWithAtendimento = savedAtendimento => res.json(savedAtendimento);
+  
+  return Promise
+    .resolve()
+    .then(getAtendimento)
+    .then(populateLocation)
+    .then(createInstance)
+    .then(saveInstance)
+    .then(respondWithAtendimento)
     .catch(error => next(error));
 };
 
 const updateAtendimento = (req, res, next) => {
-  const atendimento = formatAtendimento(req.body);
-  const _id = prop('id', req.params);
+  const id = prop('id', req.params)
+  const findAtendimentoById = id => Atendimentos.findById(id)
+  const getAtendimentoFromReq = formatAtendimento(req.body)
+  const updateLocation = atendimentoFromDB => {
+  const atendimentoReq = formatAtendimento(req.body)
 
-  Atendimentos
-    .findByIdAndUpdate(_id, atendimento, {
+    if(
+      atendimentoFromDB.endereco.cep !== atendimentoReq.endereco.cep
+      || atendimentoFromDB.endereco.rua !== atendimentoReq.endereco.rua
+      || !atendimentoFromDB.location
+    ) {
+      return populateLocation(atendimentoReq)
+    }
+
+    return atendimentoReq
+  }
+  const updateAtendimento = atendimento => Atendimentos
+    .findByIdAndUpdate(id, atendimento, {
       runValidators: true,
       new: true,
     })
-    .then(updatedData => res.json(updatedData))
+  const respondWithAtendimento = savedAtendimento => res.json(savedAtendimento);
+
+  return Promise
+    .resolve()
+    .then(() => id)
+    .then(findAtendimentoById)
+    .then(updateLocation)
+    .then(updateAtendimento)
+    .then(respondWithAtendimento)
     .catch(error => next(error));
 };
 
@@ -186,7 +241,25 @@ const getLastAtendimentos = (req, res, next) => {
 
 }
 
+const associarAtendimento = (req, res, next) => {
+  const tecnico = req.body.tecnico;
+  const id = req.params.id;
+
+  const findAtendimento = id => Atendimentos.findById(id);
+  Promise.resolve(id)
+    .then(findAtendimento)
+    .then(atendimento => {
+      atendimento.tecnico = tecnico;
+      atendimento.estado = 'associado'
+      return atendimento.save({ new: true });
+    })
+    .then(atendimento => res.json(atendimento))
+
+}
+
+
 module.exports = {
+  associarAtendimento,
   getAll,
   patchAtendimentos,
   atendimentoNew,
