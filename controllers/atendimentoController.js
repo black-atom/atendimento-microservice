@@ -37,6 +37,7 @@ const getAll = async(req, res, next) => {
     _id: 1,
     estado: 1,
     createdBy: 1,
+    createdAt: 1,
     motivos: 1,
     liberacao: 1,
     "relatorio.faturamento.equipamentos": 1,
