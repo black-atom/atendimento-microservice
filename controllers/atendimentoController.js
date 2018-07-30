@@ -44,6 +44,8 @@ const getAll = async(req, res, next) => {
     location: 1,
     observacao: 1,
     descricao: 1,
+    isViewed: 1,
+    faturamento: 1,
     modelo_equipamento: 1,
     numero_equipamento: 1,        
   }
