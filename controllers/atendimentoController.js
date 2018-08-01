@@ -59,12 +59,16 @@ const getAll = async(req, res, next) => {
   for (key in query) {
     let valor = query[key];
 
+    if (query[key] === 'null') {
+      valor = null;
+    }
+    
     if (key.indexOf('data') > -1) {
       valor = parseDate(key)(query)
-    } else if (key !== "data_atendimento" && query[key] !== "null" && query[key] !== null && key.indexOf('id') < 0) {
+    }
+
+    if (query[key] !== null && query[key] !== 'null' && key !== 'data_atendimento') {
       valor = new RegExp("" + valor + "", "i");
-    } else if (query[key] === "null") {
-      valor = null;
     }
 
     query = { ...query, [key]: valor };
