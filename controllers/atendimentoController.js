@@ -74,6 +74,10 @@ const getAll = async(req, res, next) => {
       valor = new RegExp("" + valor + "", "i");
     }
 
+    if (query[key] !== null && query[key] !== 'null' && key.indexOf('id') > -1) {
+      valor = query[key]
+    }
+
     query = { ...query, [key]: valor };
   }
 
