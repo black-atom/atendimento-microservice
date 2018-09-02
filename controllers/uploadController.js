@@ -8,7 +8,10 @@ const { prop } = require('ramda');
 const fs = require('fs');
 
 function getFileNameToStore(req, file, cb) {
-  console.log(file.originalname);
+  console.log({
+    atendimentoId: req.params.id,
+    originalName: file.originalname
+  });
 	cb(null,`atendimento/images/${uuid()}_${file.originalname}`);
 }
 
@@ -25,6 +28,11 @@ const atendimentoUploadHandler = multer({
 
 const atendimentoUpload = ( req, res, next ) => {
     const id = prop("id", req.params) || '599364106d357012f81bbaea';
+    console.log({
+      atendimentoId: id,
+      originalName: req.file.originalname,
+      filename: req.file.filename
+    });
     const filename = prop("filename", req.file);
     const tipo = req.body.tipo || 'inicio_atendimento';
 

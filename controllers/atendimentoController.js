@@ -116,6 +116,7 @@ const updateAtendimento = (req, res, next) => {
   const getAtendimentoFromReq = formatAtendimento(req.body)
   const updateLocation = atendimentoFromDB => {
   const atendimentoReq = formatAtendimento(req.body)
+  delete atendimentoReq.imagens
 
     if(
       atendimentoFromDB.endereco.cep !== atendimentoReq.endereco.cep
@@ -156,6 +157,7 @@ const patchAtendimentos = (req, res, next) => {
 
   if (Array.isArray(atendimentosData)) {
     const atendimentosPromise = atendimentosData.map(atendimentoData => {
+      delete atendimentoData.imagens
       return Atendimentos.findByIdAndUpdate(
         atendimentoData._id,
         atendimentoData,
