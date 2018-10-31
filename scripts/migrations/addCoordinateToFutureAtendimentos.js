@@ -3,7 +3,7 @@ const { tap, flatMap, map, zip } = require('rxjs/operators');
 const { atendimentos } = require('../../models');
 const moment = require('moment');
 const { location } = require('../../controllers/utils')
-const data = moment('20180709')
+const data = moment('20181031')
 
 const populateLocation = (atendimento) => {
   return location(atendimento.endereco)

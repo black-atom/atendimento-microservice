@@ -2,6 +2,8 @@ const location = require('./location')
 
 
 location({
-  rua: 'Rua Cacilda Becker',
-  cidade: 'São Bernardo do Campo'
+  rua: 'Rua Santa Catarina',
+  cidade: 'Diadema',
+  cep: '09961400',
+  uf: 'SP'
 }).then(console.log)
