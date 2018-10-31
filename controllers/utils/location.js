@@ -13,11 +13,11 @@ const googleResToCoordinates = pipe(
   ({ lat, lng }) => [lat, lng]
 )
 
-const getLocationFromEndereco = ({ rua, cidade, uf, cep, numero, bairro }) => {
+const getLocationFromEndereco = ({ rua, cidade, uf, cep, numero = 0, bairro }) => {
   return mapsClient.geocode({
-    address: `${rua}, ${cidade}`,
+    address: `${rua}, ${numero} - ${bairro}, ${cidade} - ${uf}, ${cep}`,
     components: {
-      postal_code: cep,
+      //postal_code: cep,
     }
   })
     .asPromise()

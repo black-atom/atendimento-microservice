@@ -15,7 +15,8 @@ const populateLocation = (atendimento) => {
     }));
 };
 
-console.log(data.toDate())
+const errors = []
+
 from(atendimentos.find({
   data_atendimento: {
     $gt: data.startOf('day').toDate(),
@@ -33,6 +34,12 @@ from(atendimentos.find({
 
           return atendimento.save()
         })
-    })
+        .catch(error => {
+          console.log('error ====>', error)
+          errors.push(atendimento)
+        })
+    }),
+    tap(() => console.log('erros', errors)),
+    tap(() => console.log('n of errors ====>', errors.length))
   )
   .subscribe(atendimento => console.log(atendimento._id))
