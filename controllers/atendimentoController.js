@@ -52,7 +52,7 @@ const getAll = async(req, res, next) => {
   }
 
   const parseDate = propName => queryObj => {
-    const momentDate = moment(new Date(query[propName]))
+    const momentDate = moment(new Date(queryObj[propName]))
     return ({
       $gte: momentDate.startOf('day').toISOString(),
       $lte: momentDate.endOf('day').toISOString()
